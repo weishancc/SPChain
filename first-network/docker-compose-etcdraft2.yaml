@@ -1,0 +1,77 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+volumes:
+  orderer2.spchain.com:
+  orderer3.spchain.com:
+  orderer4.spchain.com:
+  orderer5.spchain.com:
+
+networks:
+  byfn:
+
+services:
+
+  orderer2.spchain.com:
+    extends:
+      file: base/peer-base.yaml
+      service: orderer-base
+    container_name: orderer2.spchain.com
+    networks:
+    - byfn
+    volumes:
+        - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - ./crypto-config/ordererOrganizations/spchain.com/orderers/orderer2.spchain.com/msp:/var/hyperledger/orderer/msp
+        - ./crypto-config/ordererOrganizations/spchain.com/orderers/orderer2.spchain.com/tls/:/var/hyperledger/orderer/tls
+        - orderer2.spchain.com:/var/hyperledger/production/orderer
+    ports:
+    - 8050:7050
+
+  orderer3.spchain.com:
+    extends:
+      file: base/peer-base.yaml
+      service: orderer-base
+    container_name: orderer3.spchain.com
+    networks:
+    - byfn
+    volumes:
+        - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - ./crypto-config/ordererOrganizations/spchain.com/orderers/orderer3.spchain.com/msp:/var/hyperledger/orderer/msp
+        - ./crypto-config/ordererOrganizations/spchain.com/orderers/orderer3.spchain.com/tls/:/var/hyperledger/orderer/tls
+        - orderer3.spchain.com:/var/hyperledger/production/orderer
+    ports:
+    - 9050:7050
+
+  orderer4.spchain.com:
+    extends:
+      file: base/peer-base.yaml
+      service: orderer-base
+    container_name: orderer4.spchain.com
+    networks:
+    - byfn
+    volumes:
+        - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - ./crypto-config/ordererOrganizations/spchain.com/orderers/orderer4.spchain.com/msp:/var/hyperledger/orderer/msp
+        - ./crypto-config/ordererOrganizations/spchain.com/orderers/orderer4.spchain.com/tls/:/var/hyperledger/orderer/tls
+        - orderer4.spchain.com:/var/hyperledger/production/orderer
+    ports:
+    - 10050:7050
+
+  orderer5.spchain.com:
+    extends:
+      file: base/peer-base.yaml
+      service: orderer-base
+    container_name: orderer5.spchain.com
+    networks:
+    - byfn
+    volumes:
+        - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - ./crypto-config/ordererOrganizations/spchain.com/orderers/orderer5.spchain.com/msp:/var/hyperledger/orderer/msp
+        - ./crypto-config/ordererOrganizations/spchain.com/orderers/orderer5.spchain.com/tls/:/var/hyperledger/orderer/tls
+        - orderer5.spchain.com:/var/hyperledger/production/orderer
+    ports:
+    - 11050:7050

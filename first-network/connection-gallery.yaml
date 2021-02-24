@@ -1,0 +1,88 @@
+---
+name: first-network-gallery
+version: 1.0.0
+client:
+  organization: gallery
+  connection:
+    timeout:
+      peer:
+        endorser: '300'
+organizations:
+  gallery:
+    mspid: galleryMSP
+    peers:
+    - peer0.gallery.spchain.com
+    - peer1.gallery.spchain.com
+    certificateAuthorities:
+    - ca.gallery.spchain.com
+peers:
+  peer0.gallery.spchain.com:
+    url: grpcs://localhost:13051
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICYjCCAgmgAwIBAgIQCIIjz5KiUa312McwGaojNTAKBggqhkjOPQQDAjB8MQsw
+        CQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy
+        YW5jaXNjbzEcMBoGA1UEChMTZ2FsbGVyeS5zcGNoYWluLmNvbTEiMCAGA1UEAxMZ
+        dGxzY2EuZ2FsbGVyeS5zcGNoYWluLmNvbTAeFw0yMTAyMjQwNzEwMDBaFw0zMTAy
+        MjIwNzEwMDBaMHwxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYw
+        FAYDVQQHEw1TYW4gRnJhbmNpc2NvMRwwGgYDVQQKExNnYWxsZXJ5LnNwY2hhaW4u
+        Y29tMSIwIAYDVQQDExl0bHNjYS5nYWxsZXJ5LnNwY2hhaW4uY29tMFkwEwYHKoZI
+        zj0CAQYIKoZIzj0DAQcDQgAEWf9rhSamdscAzWKZMfiWmQOWrljloVn9kTnHECIo
+        VkoyjO8RDYoe58OBJ4L2lkOh158sHdeloQpxANcnIod3pqNtMGswDgYDVR0PAQH/
+        BAQDAgGmMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8E
+        BTADAQH/MCkGA1UdDgQiBCDVS31akqDcUqemPLnJpHwET7R0yPF74o941BHvgTRE
+        8TAKBggqhkjOPQQDAgNHADBEAiALipNPGeCtHqfFIShzrLeTRdh01pU70nGoquv5
+        sHZAeAIgCt58NsnjwSq5h4OSkuca4c9rTd4d5lNGhsi8B6l6uXc=
+        -----END CERTIFICATE-----
+        
+    grpcOptions:
+      ssl-target-name-override: peer0.gallery.spchain.com
+      hostnameOverride: peer0.gallery.spchain.com
+  peer1.gallery.spchain.com:
+    url: grpcs://localhost:14051
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICYjCCAgmgAwIBAgIQCIIjz5KiUa312McwGaojNTAKBggqhkjOPQQDAjB8MQsw
+        CQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy
+        YW5jaXNjbzEcMBoGA1UEChMTZ2FsbGVyeS5zcGNoYWluLmNvbTEiMCAGA1UEAxMZ
+        dGxzY2EuZ2FsbGVyeS5zcGNoYWluLmNvbTAeFw0yMTAyMjQwNzEwMDBaFw0zMTAy
+        MjIwNzEwMDBaMHwxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYw
+        FAYDVQQHEw1TYW4gRnJhbmNpc2NvMRwwGgYDVQQKExNnYWxsZXJ5LnNwY2hhaW4u
+        Y29tMSIwIAYDVQQDExl0bHNjYS5nYWxsZXJ5LnNwY2hhaW4uY29tMFkwEwYHKoZI
+        zj0CAQYIKoZIzj0DAQcDQgAEWf9rhSamdscAzWKZMfiWmQOWrljloVn9kTnHECIo
+        VkoyjO8RDYoe58OBJ4L2lkOh158sHdeloQpxANcnIod3pqNtMGswDgYDVR0PAQH/
+        BAQDAgGmMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8E
+        BTADAQH/MCkGA1UdDgQiBCDVS31akqDcUqemPLnJpHwET7R0yPF74o941BHvgTRE
+        8TAKBggqhkjOPQQDAgNHADBEAiALipNPGeCtHqfFIShzrLeTRdh01pU70nGoquv5
+        sHZAeAIgCt58NsnjwSq5h4OSkuca4c9rTd4d5lNGhsi8B6l6uXc=
+        -----END CERTIFICATE-----
+        
+    grpcOptions:
+      ssl-target-name-override: peer1.gallery.spchain.com
+      hostnameOverride: peer1.gallery.spchain.com
+certificateAuthorities:
+  ca.gallery.spchain.com:
+    url: https://localhost:10054
+    caName: ca-gallery
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICXTCCAgSgAwIBAgIRAIb1yK1FEo2KlPTsnfCxwIgwCgYIKoZIzj0EAwIweTEL
+        MAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBG
+        cmFuY2lzY28xHDAaBgNVBAoTE2dhbGxlcnkuc3BjaGFpbi5jb20xHzAdBgNVBAMT
+        FmNhLmdhbGxlcnkuc3BjaGFpbi5jb20wHhcNMjEwMjI0MDcxMDAwWhcNMzEwMjIy
+        MDcxMDAwWjB5MQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQG
+        A1UEBxMNU2FuIEZyYW5jaXNjbzEcMBoGA1UEChMTZ2FsbGVyeS5zcGNoYWluLmNv
+        bTEfMB0GA1UEAxMWY2EuZ2FsbGVyeS5zcGNoYWluLmNvbTBZMBMGByqGSM49AgEG
+        CCqGSM49AwEHA0IABHYs8eZ7S3klx6JxvlUmBO6l9Etc4RanfUUoUl33sT1TyT+R
+        DKYRR20UtvxVEhZooyHdXG5NugTcypA2cGSLaQ2jbTBrMA4GA1UdDwEB/wQEAwIB
+        pjAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwEwDwYDVR0TAQH/BAUwAwEB
+        /zApBgNVHQ4EIgQgoXdHM/bdiStGym2Ljj9zAmbZN4UHft/zSNGkChylqYEwCgYI
+        KoZIzj0EAwIDRwAwRAIgHftAXhdTA7KZFBil6qGw2BRKTY1ryR9EEp1ZNdhgOGcC
+        IFDKZtS6q/xoldh/iSTPig6GlYVdYibP5FBX31ysaaYY
+        -----END CERTIFICATE-----
+        
+    httpOptions:
+      verify: false

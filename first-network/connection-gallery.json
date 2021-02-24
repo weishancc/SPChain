@@ -1,0 +1,60 @@
+{
+  "name": "first-network-gallery",
+  "version": "1.0.0",
+  "client": {
+    "organization": "Gallery",
+    "connection": {
+      "timeout": {
+        "peer": {
+          "endorser": "300"
+        }
+      }
+    }
+  },
+  "organizations": {
+    "Gallery": {
+      "mspid": "GalleryMSP",
+      "peers": [
+        "peer0.gallery.spchain.com",
+        "peer1.gallery.spchain.com"
+      ],
+      "certificateAuthorities": [
+        "ca.gallery.spchain.com"
+      ]
+    }
+  },
+  "peers": {
+    "peer0.gallery.spchain.com": {
+      "url": "grpcs://localhost:13051",
+      "tlsCACerts": {
+        "pem": "-----BEGIN CERTIFICATE-----\nMIICYjCCAgmgAwIBAgIQCIIjz5KiUa312McwGaojNTAKBggqhkjOPQQDAjB8MQsw\nCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy\nYW5jaXNjbzEcMBoGA1UEChMTZ2FsbGVyeS5zcGNoYWluLmNvbTEiMCAGA1UEAxMZ\ndGxzY2EuZ2FsbGVyeS5zcGNoYWluLmNvbTAeFw0yMTAyMjQwNzEwMDBaFw0zMTAy\nMjIwNzEwMDBaMHwxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYw\nFAYDVQQHEw1TYW4gRnJhbmNpc2NvMRwwGgYDVQQKExNnYWxsZXJ5LnNwY2hhaW4u\nY29tMSIwIAYDVQQDExl0bHNjYS5nYWxsZXJ5LnNwY2hhaW4uY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAEWf9rhSamdscAzWKZMfiWmQOWrljloVn9kTnHECIo\nVkoyjO8RDYoe58OBJ4L2lkOh158sHdeloQpxANcnIod3pqNtMGswDgYDVR0PAQH/\nBAQDAgGmMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8E\nBTADAQH/MCkGA1UdDgQiBCDVS31akqDcUqemPLnJpHwET7R0yPF74o941BHvgTRE\n8TAKBggqhkjOPQQDAgNHADBEAiALipNPGeCtHqfFIShzrLeTRdh01pU70nGoquv5\nsHZAeAIgCt58NsnjwSq5h4OSkuca4c9rTd4d5lNGhsi8B6l6uXc=\n-----END CERTIFICATE-----\n"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer0.gallery.spchain.com",
+        "hostnameOverride": "peer0.gallery.spchain.com"
+      }
+    },
+    "peer1.gallery.spchain.com": {
+      "url": "grpcs://localhost:14051",
+      "tlsCACerts": {
+        "pem": "-----BEGIN CERTIFICATE-----\nMIICYjCCAgmgAwIBAgIQCIIjz5KiUa312McwGaojNTAKBggqhkjOPQQDAjB8MQsw\nCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy\nYW5jaXNjbzEcMBoGA1UEChMTZ2FsbGVyeS5zcGNoYWluLmNvbTEiMCAGA1UEAxMZ\ndGxzY2EuZ2FsbGVyeS5zcGNoYWluLmNvbTAeFw0yMTAyMjQwNzEwMDBaFw0zMTAy\nMjIwNzEwMDBaMHwxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYw\nFAYDVQQHEw1TYW4gRnJhbmNpc2NvMRwwGgYDVQQKExNnYWxsZXJ5LnNwY2hhaW4u\nY29tMSIwIAYDVQQDExl0bHNjYS5nYWxsZXJ5LnNwY2hhaW4uY29tMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAEWf9rhSamdscAzWKZMfiWmQOWrljloVn9kTnHECIo\nVkoyjO8RDYoe58OBJ4L2lkOh158sHdeloQpxANcnIod3pqNtMGswDgYDVR0PAQH/\nBAQDAgGmMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8E\nBTADAQH/MCkGA1UdDgQiBCDVS31akqDcUqemPLnJpHwET7R0yPF74o941BHvgTRE\n8TAKBggqhkjOPQQDAgNHADBEAiALipNPGeCtHqfFIShzrLeTRdh01pU70nGoquv5\nsHZAeAIgCt58NsnjwSq5h4OSkuca4c9rTd4d5lNGhsi8B6l6uXc=\n-----END CERTIFICATE-----\n"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer1.gallery.spchain.com",
+        "hostnameOverride": "peer1.gallery.spchain.com"
+      }
+    }
+  },
+  "certificateAuthorities": {
+    "ca.gallery.spchain.com": {
+      "url": "https://localhost:10054",
+      "caName": "ca-gallery",
+      "tlsCACerts": {
+        "pem": "-----BEGIN CERTIFICATE-----\nMIICXTCCAgSgAwIBAgIRAIb1yK1FEo2KlPTsnfCxwIgwCgYIKoZIzj0EAwIweTEL\nMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBG\ncmFuY2lzY28xHDAaBgNVBAoTE2dhbGxlcnkuc3BjaGFpbi5jb20xHzAdBgNVBAMT\nFmNhLmdhbGxlcnkuc3BjaGFpbi5jb20wHhcNMjEwMjI0MDcxMDAwWhcNMzEwMjIy\nMDcxMDAwWjB5MQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQG\nA1UEBxMNU2FuIEZyYW5jaXNjbzEcMBoGA1UEChMTZ2FsbGVyeS5zcGNoYWluLmNv\nbTEfMB0GA1UEAxMWY2EuZ2FsbGVyeS5zcGNoYWluLmNvbTBZMBMGByqGSM49AgEG\nCCqGSM49AwEHA0IABHYs8eZ7S3klx6JxvlUmBO6l9Etc4RanfUUoUl33sT1TyT+R\nDKYRR20UtvxVEhZooyHdXG5NugTcypA2cGSLaQ2jbTBrMA4GA1UdDwEB/wQEAwIB\npjAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwEwDwYDVR0TAQH/BAUwAwEB\n/zApBgNVHQ4EIgQgoXdHM/bdiStGym2Ljj9zAmbZN4UHft/zSNGkChylqYEwCgYI\nKoZIzj0EAwIDRwAwRAIgHftAXhdTA7KZFBil6qGw2BRKTY1ryR9EEp1ZNdhgOGcC\nIFDKZtS6q/xoldh/iSTPig6GlYVdYibP5FBX31ysaaYY\n-----END CERTIFICATE-----\n"
+      },
+      "httpOptions": {
+        "verify": false
+      }
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "name": "first-network-md",
+  "version": "1.0.0",
+  "client": {
+    "organization": "Md",
+    "connection": {
+      "timeout": {
+        "peer": {
+          "endorser": "300"
+        }
+      }
+    }
+  },
+  "organizations": {
+    "Md": {
+      "mspid": "MdMSP",
+      "peers": [
+        "peer0.md.spchain.com",
+        "peer1.md.spchain.com"
+      ],
+      "certificateAuthorities": [
+        "ca.md.spchain.com"
+      ]
+    }
+  },
+  "peers": {
+    "peer0.md.spchain.com": {
+      "url": "grpcs://localhost:11051",
+      "tlsCACerts": {
+        "pem": "-----BEGIN CERTIFICATE-----\nMIICTzCCAfWgAwIBAgIQGalbAHWJn1ssRv3+HKMWkDAKBggqhkjOPQQDAjByMQsw\nCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy\nYW5jaXNjbzEXMBUGA1UEChMObWQuc3BjaGFpbi5jb20xHTAbBgNVBAMTFHRsc2Nh\nLm1kLnNwY2hhaW4uY29tMB4XDTIxMDIyNDA3MTAwMFoXDTMxMDIyMjA3MTAwMFow\ncjELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNh\nbiBGcmFuY2lzY28xFzAVBgNVBAoTDm1kLnNwY2hhaW4uY29tMR0wGwYDVQQDExR0\nbHNjYS5tZC5zcGNoYWluLmNvbTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABPe2\nxlO3tlTnnAd9DLRRtldH8npM4e0xx/AIkJmXcJXdrgP3M7P1ELzY9srqs6B9/wVL\nb5bNE/lvwib0TlKGrgSjbTBrMA4GA1UdDwEB/wQEAwIBpjAdBgNVHSUEFjAUBggr\nBgEFBQcDAgYIKwYBBQUHAwEwDwYDVR0TAQH/BAUwAwEB/zApBgNVHQ4EIgQgLZch\nlzhLhHoj8XRNdV7p15v+ojT3yE6Xpz9DlKVsQbowCgYIKoZIzj0EAwIDSAAwRQIh\nAN7K3EUrc7RULqLVDfLBauQtaulOKc/0dChr45nW1SqwAiB+G+Urzh6pAb0lZoU1\n7wEaEBQSr/FKZ1oYbT6ewf8dVQ==\n-----END CERTIFICATE-----\n"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer0.md.spchain.com",
+        "hostnameOverride": "peer0.md.spchain.com"
+      }
+    },
+    "peer1.md.spchain.com": {
+      "url": "grpcs://localhost:12051",
+      "tlsCACerts": {
+        "pem": "-----BEGIN CERTIFICATE-----\nMIICTzCCAfWgAwIBAgIQGalbAHWJn1ssRv3+HKMWkDAKBggqhkjOPQQDAjByMQsw\nCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy\nYW5jaXNjbzEXMBUGA1UEChMObWQuc3BjaGFpbi5jb20xHTAbBgNVBAMTFHRsc2Nh\nLm1kLnNwY2hhaW4uY29tMB4XDTIxMDIyNDA3MTAwMFoXDTMxMDIyMjA3MTAwMFow\ncjELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNh\nbiBGcmFuY2lzY28xFzAVBgNVBAoTDm1kLnNwY2hhaW4uY29tMR0wGwYDVQQDExR0\nbHNjYS5tZC5zcGNoYWluLmNvbTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABPe2\nxlO3tlTnnAd9DLRRtldH8npM4e0xx/AIkJmXcJXdrgP3M7P1ELzY9srqs6B9/wVL\nb5bNE/lvwib0TlKGrgSjbTBrMA4GA1UdDwEB/wQEAwIBpjAdBgNVHSUEFjAUBggr\nBgEFBQcDAgYIKwYBBQUHAwEwDwYDVR0TAQH/BAUwAwEB/zApBgNVHQ4EIgQgLZch\nlzhLhHoj8XRNdV7p15v+ojT3yE6Xpz9DlKVsQbowCgYIKoZIzj0EAwIDSAAwRQIh\nAN7K3EUrc7RULqLVDfLBauQtaulOKc/0dChr45nW1SqwAiB+G+Urzh6pAb0lZoU1\n7wEaEBQSr/FKZ1oYbT6ewf8dVQ==\n-----END CERTIFICATE-----\n"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer1.md.spchain.com",
+        "hostnameOverride": "peer1.md.spchain.com"
+      }
+    }
+  },
+  "certificateAuthorities": {
+    "ca.md.spchain.com": {
+      "url": "https://localhost:9054",
+      "caName": "ca-md",
+      "tlsCACerts": {
+        "pem": "-----BEGIN CERTIFICATE-----\nMIICSTCCAfCgAwIBAgIRAOPfs4ZuERe7kxL4l8xCpYIwCgYIKoZIzj0EAwIwbzEL\nMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBG\ncmFuY2lzY28xFzAVBgNVBAoTDm1kLnNwY2hhaW4uY29tMRowGAYDVQQDExFjYS5t\nZC5zcGNoYWluLmNvbTAeFw0yMTAyMjQwNzEwMDBaFw0zMTAyMjIwNzEwMDBaMG8x\nCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1TYW4g\nRnJhbmNpc2NvMRcwFQYDVQQKEw5tZC5zcGNoYWluLmNvbTEaMBgGA1UEAxMRY2Eu\nbWQuc3BjaGFpbi5jb20wWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAATX7FFaqxdU\nqItdb252P87rGGJGZi6F3ETGgNq76WSQtOIZvyMNcb1Q4cFKTnI0rCZwOdgTzDfZ\necOccSlhqJIao20wazAOBgNVHQ8BAf8EBAMCAaYwHQYDVR0lBBYwFAYIKwYBBQUH\nAwIGCCsGAQUFBwMBMA8GA1UdEwEB/wQFMAMBAf8wKQYDVR0OBCIEIO801UnXXB5V\n147ZyJ5sXgEvDI3zk99xAYMnn86XKXNkMAoGCCqGSM49BAMCA0cAMEQCICeonb/r\nb/2LKzohFocGi12zHjNn8Dpgfa9lcOFgdCxIAiB1pdqIc2FhvanRvlbQC+Tgl7O3\nxXGl6k2sNb9W2fEU9A==\n-----END CERTIFICATE-----\n"
+      },
+      "httpOptions": {
+        "verify": false
+      }
+    }
+  }
+}

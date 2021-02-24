@@ -1,0 +1,88 @@
+---
+name: first-network-md
+version: 1.0.0
+client:
+  organization: md
+  connection:
+    timeout:
+      peer:
+        endorser: '300'
+organizations:
+  md:
+    mspid: mdMSP
+    peers:
+    - peer0.md.spchain.com
+    - peer1.md.spchain.com
+    certificateAuthorities:
+    - ca.md.spchain.com
+peers:
+  peer0.md.spchain.com:
+    url: grpcs://localhost:11051
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICTzCCAfWgAwIBAgIQGalbAHWJn1ssRv3+HKMWkDAKBggqhkjOPQQDAjByMQsw
+        CQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy
+        YW5jaXNjbzEXMBUGA1UEChMObWQuc3BjaGFpbi5jb20xHTAbBgNVBAMTFHRsc2Nh
+        Lm1kLnNwY2hhaW4uY29tMB4XDTIxMDIyNDA3MTAwMFoXDTMxMDIyMjA3MTAwMFow
+        cjELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNh
+        biBGcmFuY2lzY28xFzAVBgNVBAoTDm1kLnNwY2hhaW4uY29tMR0wGwYDVQQDExR0
+        bHNjYS5tZC5zcGNoYWluLmNvbTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABPe2
+        xlO3tlTnnAd9DLRRtldH8npM4e0xx/AIkJmXcJXdrgP3M7P1ELzY9srqs6B9/wVL
+        b5bNE/lvwib0TlKGrgSjbTBrMA4GA1UdDwEB/wQEAwIBpjAdBgNVHSUEFjAUBggr
+        BgEFBQcDAgYIKwYBBQUHAwEwDwYDVR0TAQH/BAUwAwEB/zApBgNVHQ4EIgQgLZch
+        lzhLhHoj8XRNdV7p15v+ojT3yE6Xpz9DlKVsQbowCgYIKoZIzj0EAwIDSAAwRQIh
+        AN7K3EUrc7RULqLVDfLBauQtaulOKc/0dChr45nW1SqwAiB+G+Urzh6pAb0lZoU1
+        7wEaEBQSr/FKZ1oYbT6ewf8dVQ==
+        -----END CERTIFICATE-----
+        
+    grpcOptions:
+      ssl-target-name-override: peer0.md.spchain.com
+      hostnameOverride: peer0.md.spchain.com
+  peer1.md.spchain.com:
+    url: grpcs://localhost:12051
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICTzCCAfWgAwIBAgIQGalbAHWJn1ssRv3+HKMWkDAKBggqhkjOPQQDAjByMQsw
+        CQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy
+        YW5jaXNjbzEXMBUGA1UEChMObWQuc3BjaGFpbi5jb20xHTAbBgNVBAMTFHRsc2Nh
+        Lm1kLnNwY2hhaW4uY29tMB4XDTIxMDIyNDA3MTAwMFoXDTMxMDIyMjA3MTAwMFow
+        cjELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNh
+        biBGcmFuY2lzY28xFzAVBgNVBAoTDm1kLnNwY2hhaW4uY29tMR0wGwYDVQQDExR0
+        bHNjYS5tZC5zcGNoYWluLmNvbTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABPe2
+        xlO3tlTnnAd9DLRRtldH8npM4e0xx/AIkJmXcJXdrgP3M7P1ELzY9srqs6B9/wVL
+        b5bNE/lvwib0TlKGrgSjbTBrMA4GA1UdDwEB/wQEAwIBpjAdBgNVHSUEFjAUBggr
+        BgEFBQcDAgYIKwYBBQUHAwEwDwYDVR0TAQH/BAUwAwEB/zApBgNVHQ4EIgQgLZch
+        lzhLhHoj8XRNdV7p15v+ojT3yE6Xpz9DlKVsQbowCgYIKoZIzj0EAwIDSAAwRQIh
+        AN7K3EUrc7RULqLVDfLBauQtaulOKc/0dChr45nW1SqwAiB+G+Urzh6pAb0lZoU1
+        7wEaEBQSr/FKZ1oYbT6ewf8dVQ==
+        -----END CERTIFICATE-----
+        
+    grpcOptions:
+      ssl-target-name-override: peer1.md.spchain.com
+      hostnameOverride: peer1.md.spchain.com
+certificateAuthorities:
+  ca.md.spchain.com:
+    url: https://localhost:9054
+    caName: ca-md
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICSTCCAfCgAwIBAgIRAOPfs4ZuERe7kxL4l8xCpYIwCgYIKoZIzj0EAwIwbzEL
+        MAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBG
+        cmFuY2lzY28xFzAVBgNVBAoTDm1kLnNwY2hhaW4uY29tMRowGAYDVQQDExFjYS5t
+        ZC5zcGNoYWluLmNvbTAeFw0yMTAyMjQwNzEwMDBaFw0zMTAyMjIwNzEwMDBaMG8x
+        CzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1TYW4g
+        RnJhbmNpc2NvMRcwFQYDVQQKEw5tZC5zcGNoYWluLmNvbTEaMBgGA1UEAxMRY2Eu
+        bWQuc3BjaGFpbi5jb20wWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAATX7FFaqxdU
+        qItdb252P87rGGJGZi6F3ETGgNq76WSQtOIZvyMNcb1Q4cFKTnI0rCZwOdgTzDfZ
+        ecOccSlhqJIao20wazAOBgNVHQ8BAf8EBAMCAaYwHQYDVR0lBBYwFAYIKwYBBQUH
+        AwIGCCsGAQUFBwMBMA8GA1UdEwEB/wQFMAMBAf8wKQYDVR0OBCIEIO801UnXXB5V
+        147ZyJ5sXgEvDI3zk99xAYMnn86XKXNkMAoGCCqGSM49BAMCA0cAMEQCICeonb/r
+        b/2LKzohFocGi12zHjNn8Dpgfa9lcOFgdCxIAiB1pdqIc2FhvanRvlbQC+Tgl7O3
+        xXGl6k2sNb9W2fEU9A==
+        -----END CERTIFICATE-----
+        
+    httpOptions:
+      verify: false

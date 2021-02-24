@@ -1,0 +1,90 @@
+---
+name: first-network-collector
+version: 1.0.0
+client:
+  organization: collector
+  connection:
+    timeout:
+      peer:
+        endorser: '300'
+organizations:
+  collector:
+    mspid: collectorMSP
+    peers:
+    - peer0.collector.spchain.com
+    - peer1.collector.spchain.com
+    certificateAuthorities:
+    - ca.collector.spchain.com
+peers:
+  peer0.collector.spchain.com:
+    url: grpcs://localhost:7051
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICbTCCAhSgAwIBAgIRAPzlTuiaugl4iGs/BlnHocUwCgYIKoZIzj0EAwIwgYAx
+        CzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1TYW4g
+        RnJhbmNpc2NvMR4wHAYDVQQKExVjb2xsZWN0b3Iuc3BjaGFpbi5jb20xJDAiBgNV
+        BAMTG3Rsc2NhLmNvbGxlY3Rvci5zcGNoYWluLmNvbTAeFw0yMTAyMjQwNzEwMDBa
+        Fw0zMTAyMjIwNzEwMDBaMIGAMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZv
+        cm5pYTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNjbzEeMBwGA1UEChMVY29sbGVjdG9y
+        LnNwY2hhaW4uY29tMSQwIgYDVQQDExt0bHNjYS5jb2xsZWN0b3Iuc3BjaGFpbi5j
+        b20wWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAASqkv95ygj7us+0gX55cBS8NdWS
+        D2V84o9U3p9mpyHQPeXcakIQ7t1uSLdh+aNxmIFi9aqxshtzymaMU0bA80Vho20w
+        azAOBgNVHQ8BAf8EBAMCAaYwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMB
+        MA8GA1UdEwEB/wQFMAMBAf8wKQYDVR0OBCIEIAj6oBvJnryxhp6+pVUtB/tKy3mj
+        DupdYRSHaF5WtIlUMAoGCCqGSM49BAMCA0cAMEQCIH0YFBfANXvPCOd/+uh7Djpe
+        iaDSWqOiiywY0OFKsxx/AiBFnOIoOuuTHLoxcRC0RL2cdBLZ1VOYbSrAXiXncd/D
+        3A==
+        -----END CERTIFICATE-----
+        
+    grpcOptions:
+      ssl-target-name-override: peer0.collector.spchain.com
+      hostnameOverride: peer0.collector.spchain.com
+  peer1.collector.spchain.com:
+    url: grpcs://localhost:8051
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICbTCCAhSgAwIBAgIRAPzlTuiaugl4iGs/BlnHocUwCgYIKoZIzj0EAwIwgYAx
+        CzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1TYW4g
+        RnJhbmNpc2NvMR4wHAYDVQQKExVjb2xsZWN0b3Iuc3BjaGFpbi5jb20xJDAiBgNV
+        BAMTG3Rsc2NhLmNvbGxlY3Rvci5zcGNoYWluLmNvbTAeFw0yMTAyMjQwNzEwMDBa
+        Fw0zMTAyMjIwNzEwMDBaMIGAMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZv
+        cm5pYTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNjbzEeMBwGA1UEChMVY29sbGVjdG9y
+        LnNwY2hhaW4uY29tMSQwIgYDVQQDExt0bHNjYS5jb2xsZWN0b3Iuc3BjaGFpbi5j
+        b20wWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAASqkv95ygj7us+0gX55cBS8NdWS
+        D2V84o9U3p9mpyHQPeXcakIQ7t1uSLdh+aNxmIFi9aqxshtzymaMU0bA80Vho20w
+        azAOBgNVHQ8BAf8EBAMCAaYwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMB
+        MA8GA1UdEwEB/wQFMAMBAf8wKQYDVR0OBCIEIAj6oBvJnryxhp6+pVUtB/tKy3mj
+        DupdYRSHaF5WtIlUMAoGCCqGSM49BAMCA0cAMEQCIH0YFBfANXvPCOd/+uh7Djpe
+        iaDSWqOiiywY0OFKsxx/AiBFnOIoOuuTHLoxcRC0RL2cdBLZ1VOYbSrAXiXncd/D
+        3A==
+        -----END CERTIFICATE-----
+        
+    grpcOptions:
+      ssl-target-name-override: peer1.collector.spchain.com
+      hostnameOverride: peer1.collector.spchain.com
+certificateAuthorities:
+  ca.collector.spchain.com:
+    url: https://localhost:7054
+    caName: ca-collector
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICZTCCAgugAwIBAgIQIZ8eVQRBe34N1auN85I6HjAKBggqhkjOPQQDAjB9MQsw
+        CQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy
+        YW5jaXNjbzEeMBwGA1UEChMVY29sbGVjdG9yLnNwY2hhaW4uY29tMSEwHwYDVQQD
+        ExhjYS5jb2xsZWN0b3Iuc3BjaGFpbi5jb20wHhcNMjEwMjI0MDcxMDAwWhcNMzEw
+        MjIyMDcxMDAwWjB9MQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEW
+        MBQGA1UEBxMNU2FuIEZyYW5jaXNjbzEeMBwGA1UEChMVY29sbGVjdG9yLnNwY2hh
+        aW4uY29tMSEwHwYDVQQDExhjYS5jb2xsZWN0b3Iuc3BjaGFpbi5jb20wWTATBgcq
+        hkjOPQIBBggqhkjOPQMBBwNCAATxk7Je9RFpBDe+ZG8WDzg6fp912/5G6CoeZEX9
+        UvOJfEnaxicZmu8D9SFeIaBC+jzwGTvwtSp4RBjL8jy769Lco20wazAOBgNVHQ8B
+        Af8EBAMCAaYwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMBMA8GA1UdEwEB
+        /wQFMAMBAf8wKQYDVR0OBCIEIIleGh+6QNW5se3WseDGV2Fp0JOW9RQMb+8qVdxD
+        i3BtMAoGCCqGSM49BAMCA0gAMEUCIQDxhccUOYL6Z/32BHRQ0M/29Od8EEEbluF0
+        p3nFAzB9aQIgU6uQgKLc1/QdWAWqKo+5mSdjd11IUf7ArqlVSkTHW2w=
+        -----END CERTIFICATE-----
+        
+    httpOptions:
+      verify: false
