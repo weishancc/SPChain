@@ -150,11 +150,11 @@ docker exec \
     -o orderer.spchain.com:7050 \
     -C mychannel \
     -n artwork \
-    -c '{"Args":["uploadArtwork","tokenID","hash","owner","creator","name","desc"]}' \
+    -c '{"Args":["uploadArtwork","tokenID","en-pointer","owner","creator","name","desc"]}' \
     --waitForEvent \
     --tls \
     --cafile ${ORDERER_TLS_ROOTCERT_FILE} \
-    --peerAddresses peer0.creator.spchain.com:7051 \
+    --peerAddresses peer0.creator.spchain.com:9051 \
     --tlsRootCertFiles ${CREATOR_TLS_ROOTCERT_FILE}
 set +x
 

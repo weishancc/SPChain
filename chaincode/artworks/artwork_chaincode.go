@@ -4,7 +4,7 @@
 
 // ==== Invoke Artworks ====
 // peer chaincode invoke -C mychannel -n artworks -c '{"Args":["init"]}'
-// peer chaincode invoke -C mychannel -n artworks -c '{"Args":["uploadArtwork","tokenID","hash","owner","creator","name","desc"]}'
+// peer chaincode invoke -C mychannel -n artworks -c '{"Args":["uploadArtwork","tokenID","en_pointer","owner","creator","name","desc"]}'
 // peer chaincode invoke -C mychannel -n artworks -c '{"Args":["transferArtwork","tokenID","newOwner"]}'
 // peer chaincode invoke -C mychannel -n artworks -c '{"Args":["deleteArtwork","tokenID"]}'
 
@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"strconv"
 	"time"
+	"io/ioutil"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
@@ -33,11 +34,12 @@ type SimpleChaincode struct {
 
 type Artwork struct {
 	ObjectType string `json:"docType"` //docType is used to distinguish the various types of objects in state database
-	Hash	   string `json:"Hash"`
+	Enhash	   string `json:"Enhash"`
 	Owner      string `json:"Owner"`
 	Creator    string `json:"Creator"`
 	Name       string `json:"Name"`
 	Desc	   string `json:"Desc"`	//Description
+	Timestamp  string `json:"Timestamp"`
 }
 
 // ===================================================================================
@@ -50,15 +52,17 @@ func main() {
 	}
 }
 
+// ============================================================
 // Init initializes chaincode
-// ===========================
+// ============================================================
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	fmt.Println("Artwork Init")
 	return shim.Success(nil)
 }
 
+// ============================================================
 // Invoke - Our entry point for Invocations
-// ========================================
+// ============================================================
 func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	function, args := stub.GetFunctionAndParameters()
 	fmt.Println("invoke is running " + function)
@@ -112,12 +116,12 @@ func (t *SimpleChaincode) uploadArtwork(stub shim.ChaincodeStubInterface, args [
 	if len(args[5]) <= 0 {
 		return shim.Error("6th argument must be a non-empty string")
 	}
-	tokenID := args[0]
-	hash    := args[1]
-	owner   := args[2]
-	creator := args[3]
-	name    := args[4]
-	desc    := args[5]
+	tokenID     := args[0]
+	en_pointer  := args[1]
+	owner		:= args[2]
+	creator		:= args[3]
+	name		:= args[4]
+	desc		:= args[5]
 
 	// ==== Check if Artwork already exists ====
 	ArtworkAsBytes, err := stub.GetState(tokenID)
@@ -129,8 +133,14 @@ func (t *SimpleChaincode) uploadArtwork(stub shim.ChaincodeStubInterface, args [
 	}
 
 	// ==== Create Artwork object and marshal to JSON ====
+	//Read encrpyted hash first
+	enhash, err := ioutil.ReadFile("./" + en_pointer)
+	if err != nil {
+		return shim.Error("Failed to get encrpyted hash: " + err.Error())
+	}
+
 	objectType := "Artwork"
-	artwork := &Artwork{objectType, hash, owner, creator, name, desc}
+	artwork := &Artwork{objectType, string(enhash), owner, creator, name, desc, time.Now().UTC().String()}
 	ArtworkJSONasBytes, err := json.Marshal(artwork)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -147,9 +157,9 @@ func (t *SimpleChaincode) uploadArtwork(stub shim.ChaincodeStubInterface, args [
 	return shim.Success(nil)
 }
 
-// ===============================================
+// ============================================================
 // readArtwork - read a Artwork from chaincode state
-// ===============================================
+// ============================================================
 func (t *SimpleChaincode) readArtwork(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var tokenID, jsonResp string
 	var err error
@@ -171,9 +181,9 @@ func (t *SimpleChaincode) readArtwork(stub shim.ChaincodeStubInterface, args []s
 	return shim.Success(valAsbytes)
 }
 
-// ==================================================
-// delete - remove a Artwork key/value pair from state
-// ==================================================
+// ============================================================
+// deleteArtwork - remove a Artwork key/value pair from state
+// ============================================================
 func (t *SimpleChaincode) deleteArtwork(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var jsonResp string
 	var ArtworkJSON Artwork
@@ -206,9 +216,9 @@ func (t *SimpleChaincode) deleteArtwork(stub shim.ChaincodeStubInterface, args [
 	return shim.Success(nil)
 }
 
-// ===========================================================
-// transfer a Artwork by setting a new owner name on the Artwork
-// ===========================================================
+// ===============================================================================
+// transferArtwork - transfer a Artwork by setting a new owner name on the Artwork
+// ===============================================================================
 func (t *SimpleChaincode) transferArtwork(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	//   0       1
@@ -245,6 +255,9 @@ func (t *SimpleChaincode) transferArtwork(stub shim.ChaincodeStubInterface, args
 	return shim.Success(nil)
 }
 
+// ============================================================
+// getHistoryForArtwork - get the full history for a Artwork
+// ============================================================
 func (t *SimpleChaincode) getHistoryForArtwork(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) < 1 {
@@ -310,7 +323,9 @@ func (t *SimpleChaincode) getHistoryForArtwork(stub shim.ChaincodeStubInterface,
 	return shim.Success(buffer.Bytes())
 }
 
-// query callback representing the query of a chaincode
+// ============================================================
+// queryAll - querayAll Artworks
+// ============================================================
 func (t *SimpleChaincode) queryAll(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 0 {

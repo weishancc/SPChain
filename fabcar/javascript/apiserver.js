@@ -6,10 +6,10 @@ app.use(bodyParser.json());
 // Setting for Hyperledger Fabric
 const { FileSystemWallet, Gateway } = require('fabric-network');
 const path = require('path');
-const ccpPath = path.resolve(__dirname, '..', '..', 'first-network', 'connection-collector.json')
+const ccpPath = path.resolve(__dirname, '..', '..', 'first-network', 'connection-creator.json')
 
 
-app.get('/spchain/queryallart', async function (req, res) {
+app.get('/spchain/queryAll', async function (req, res) {
     try {
 
         // Create a new file system based wallet for managing identities.
@@ -22,6 +22,7 @@ app.get('/spchain/queryallart', async function (req, res) {
         if (!userExists) {
             console.log('An identity for the user "koma" does not exist in the wallet');
             console.log('Run the registerUser.js application before retrying');
+			require('child_process').fork('registerUser.js');
             return;
         }
 
@@ -48,7 +49,7 @@ app.get('/spchain/queryallart', async function (req, res) {
 });
 
 
-app.get('/spchain/readart/:tokenid', async function (req, res) {
+app.get('/spchain/readArtwork/:tokenid', async function (req, res) {
     try {
 
         // Create a new file system based wallet for managing identities.
@@ -61,12 +62,13 @@ app.get('/spchain/readart/:tokenid', async function (req, res) {
         if (!userExists) {
             console.log('An identity for the user "koma" does not exist in the wallet');
             console.log('Run the registerUser.js application before retrying');
+			require('child_process').fork('registerUser.js');
             return;
         }
 
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
-        await gateway.connect(ccpPath, { wallet, identity: 'koma', discovery: { enabled: true, asLocalhost: false } });
+        await gateway.connect(ccpPath, { wallet, identity: 'koma', discovery: { enabled: true, asLocalhost: true } });
 
         // Get the network (channel) our contract is deployed to.
         const network = await gateway.getNetwork('mychannel');
@@ -86,7 +88,7 @@ app.get('/spchain/readart/:tokenid', async function (req, res) {
     }
 });
 
-app.post('/spchain/uploadart/', async function (req, res) {
+app.post('/spchain/uploadArtwork/', async function (req, res) {
     try {
 
         // Create a new file system based wallet for managing identities.
@@ -99,21 +101,22 @@ app.post('/spchain/uploadart/', async function (req, res) {
         if (!userExists) {
             console.log('An identity for the user "koma" does not exist in the wallet');
             console.log('Run the registerUser.js application before retrying');
+			require('child_process').fork('registerUser.js');
             return;
         }
 
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
-        await gateway.connect(ccpPath, { wallet, identity: 'koma', discovery: { enabled: true, asLocalhost: false } });
+        await gateway.connect(ccpPath, { wallet, identity: 'koma', discovery: { enabled: true, asLocalhost: true } });
 
         // Get the network (channel) our contract is deployed to.
         const network = await gateway.getNetwork('mychannel');
 
         // Get the contract from the network.
-        const contract = network.getContract('fabcar');
+        const contract = network.getContract('artwork');
 
         // Submit the specified transaction.
-        await contract.submitTransaction('uploadArtwork', req.body.tokenid, req.body.hash, req.body.owner, req.body.creator, req.body.name, req.body.desc);
+        await contract.submitTransaction('uploadArtwork', req.body.tokenid, req.body.en_pointer, req.body.owner, req.body.creator, req.body.name, req.body.desc);
         console.log('Transaction has been submitted');
         res.send('Transaction has been submitted');
 
@@ -126,7 +129,7 @@ app.post('/spchain/uploadart/', async function (req, res) {
     }
 })
 
-app.put('/spchain/transferart/:tokenid', async function (req, res) {
+app.put('/spchain/transferArtwork/:tokenid', async function (req, res) {
     try {
 
         // Create a new file system based wallet for managing identities.
@@ -139,12 +142,13 @@ app.put('/spchain/transferart/:tokenid', async function (req, res) {
         if (!userExists) {
             console.log('An identity for the user "koma" does not exist in the wallet');
             console.log('Run the registerUser.js application before retrying');
+			require('child_process').fork('registerUser.js');
             return;
         }
 
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
-        await gateway.connect(ccpPath, { wallet, identity: 'koma', discovery: { enabled: true, asLocalhost: false } });
+        await gateway.connect(ccpPath, { wallet, identity: 'koma', discovery: { enabled: true, asLocalhost: true } });
 
         // Get the network (channel) our contract is deployed to.
         const network = await gateway.getNetwork('mychannel');
@@ -153,7 +157,7 @@ app.put('/spchain/transferart/:tokenid', async function (req, res) {
         const contract = network.getContract('artwork');
 
         // Submit the specified transaction.
-        await contract.submitTransaction('changeCarOwner', req.params.tokenid, req.body.newowner);
+        await contract.submitTransaction('transferArtwork', req.params.tokenid, req.body.newowner);
         console.log('Transaction has been submitted');
         res.send('Transaction has been submitted');
 
@@ -166,7 +170,7 @@ app.put('/spchain/transferart/:tokenid', async function (req, res) {
     }	
 })
 
-app.get('/spchain/deleteart/:tokenid', async function (req, res) {
+app.get('/spchain/deleteArtwork/:tokenid', async function (req, res) {
     try {
 
         // Create a new file system based wallet for managing identities.
@@ -179,12 +183,13 @@ app.get('/spchain/deleteart/:tokenid', async function (req, res) {
         if (!userExists) {
             console.log('An identity for the user "koma" does not exist in the wallet');
             console.log('Run the registerUser.js application before retrying');
+			require('child_process').fork('registerUser.js');
             return;
         }
 
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
-        await gateway.connect(ccpPath, { wallet, identity: 'koma', discovery: { enabled: true, asLocalhost: false } });
+        await gateway.connect(ccpPath, { wallet, identity: 'koma', discovery: { enabled: true, asLocalhost: true } });
 
         // Get the network (channel) our contract is deployed to.
         const network = await gateway.getNetwork('mychannel');
@@ -204,7 +209,7 @@ app.get('/spchain/deleteart/:tokenid', async function (req, res) {
     }
 });
 
-app.get('/spchain/gethistory/:tokenid', async function (req, res) {
+app.get('/spchain/getHistoryForArtwork/:tokenid', async function (req, res) {
     try {
 
         // Create a new file system based wallet for managing identities.
@@ -217,12 +222,13 @@ app.get('/spchain/gethistory/:tokenid', async function (req, res) {
         if (!userExists) {
             console.log('An identity for the user "koma" does not exist in the wallet');
             console.log('Run the registerUser.js application before retrying');
+			require('child_process').fork('registerUser.js');
             return;
         }
 
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
-        await gateway.connect(ccpPath, { wallet, identity: 'koma', discovery: { enabled: true, asLocalhost: false } });
+        await gateway.connect(ccpPath, { wallet, identity: 'koma', discovery: { enabled: true, asLocalhost: true } });
 
         // Get the network (channel) our contract is deployed to.
         const network = await gateway.getNetwork('mychannel');

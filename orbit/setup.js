@@ -43,7 +43,7 @@ async function main() {
     //  Use 'fs' to read the image and save its string into db
     try {
       const image = await fs.readFile(artData.imagePath);
-      var hash = await db.put({ _id: uuidv4(), artwork: image, name: artData.name, desc: artData.desc, price: artData.price });
+      var hash = await db.put({ _id: uuidv4(), artwork: image, name: artData.name, desc: artData.desc, price: artData.price, role: creator});
       console.log('\n-- Store ' + hash + ' successfully \n');
     } catch (error) {
       console.log(error);
