@@ -34,7 +34,7 @@ async function main() {
 
   } else if (func == "upload") {
     // Open existed DB and put data
-    db = await orbitdb.open('/orbitdb/zdpuAqUjn1CBkRJr2ycTSd98HQVG8weKgJTdc1z1f6d7agpWZ/komadb');
+    db = await orbitdb.open('/orbitdb/zdpuAvn1WTZCTFC4nPFpKwmiYmjiADprxasJdEpER7KmoB1wF/komadb');
     await db.load();
 
     // Parse JSON fortmat artwork data to js object
@@ -43,7 +43,7 @@ async function main() {
     //  Use 'fs' to read the image and save its string into db
     try {
       const image = await fs.readFile(artData.imagePath);
-      var hash = await db.put({ _id: uuidv4(), artwork: image, name: artData.name, desc: artData.desc, price: artData.price, role: creator});
+      var hash = await db.put({ _id: uuidv4(), artwork: image, name: artData.name, desc: artData.desc, price: artData.price, role: 'creator'});
       console.log('\n-- Store ' + hash + ' successfully \n');
     } catch (error) {
       console.log(error);

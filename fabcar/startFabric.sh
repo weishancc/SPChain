@@ -142,20 +142,20 @@ echo ""
 echo -e "\nSubmitting initLedger transaction to smart contract on mychannel"
 echo "The transaction is sent to the peers with the chaincode installed so that chaincode is built before receiving the following requests"
 
-docker exec \
-  -e CORE_PEER_LOCALMSPID=CreatorMSP \
-  -e CORE_PEER_MSPCONFIGPATH=${CREATOR_MSPCONFIGPATH} \
-  cli \
-  peer chaincode invoke \
-    -o orderer.spchain.com:7050 \
-    -C mychannel \
-    -n artwork \
-    -c '{"Args":["uploadArtwork","tokenID","en-pointer","owner","creator","name","desc"]}' \
-    --waitForEvent \
-    --tls \
-    --cafile ${ORDERER_TLS_ROOTCERT_FILE} \
-    --peerAddresses peer0.creator.spchain.com:9051 \
-    --tlsRootCertFiles ${CREATOR_TLS_ROOTCERT_FILE}
+#docker exec \
+#  -e CORE_PEER_LOCALMSPID=CreatorMSP \
+#  -e CORE_PEER_MSPCONFIGPATH=${CREATOR_MSPCONFIGPATH} \
+#  cli \
+#  peer chaincode invoke \
+#    -o orderer.spchain.com:7050 \
+#    -C mychannel \
+#    -n artwork \
+#    -c '{"Args":["uploadArtwork","tokenID","en-pointer","owner","creator"]}' \
+#    --waitForEvent \
+#    --tls \
+#    --cafile ${ORDERER_TLS_ROOTCERT_FILE} \
+#    --peerAddresses peer0.creator.spchain.com:9051 \
+#    --tlsRootCertFiles ${CREATOR_TLS_ROOTCERT_FILE}
 set +x
 
 cat <<EOF

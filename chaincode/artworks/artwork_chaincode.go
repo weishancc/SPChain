@@ -4,7 +4,7 @@
 
 // ==== Invoke Artworks ====
 // peer chaincode invoke -C mychannel -n artworks -c '{"Args":["init"]}'
-// peer chaincode invoke -C mychannel -n artworks -c '{"Args":["uploadArtwork","tokenID","en_pointer","owner","creator","name","desc"]}'
+// peer chaincode invoke -C mychannel -n artworks -c '{"Args":["uploadArtwork","tokenID","en_pointer","owner","creator"]}'
 // peer chaincode invoke -C mychannel -n artworks -c '{"Args":["transferArtwork","tokenID","newOwner"]}'
 // peer chaincode invoke -C mychannel -n artworks -c '{"Args":["deleteArtwork","tokenID"]}'
 
@@ -37,8 +37,6 @@ type Artwork struct {
 	Enhash	   string `json:"Enhash"`
 	Owner      string `json:"Owner"`
 	Creator    string `json:"Creator"`
-	Name       string `json:"Name"`
-	Desc	   string `json:"Desc"`	//Description
 	Timestamp  string `json:"Timestamp"`
 }
 
@@ -92,8 +90,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 func (t *SimpleChaincode) uploadArtwork(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var err error
 
-	if len(args) != 6 {
-		return shim.Error("Incorrect number of arguments. Expecting 6 (TokenID, Hash, Owner, Creator, Name, Desc)")
+	if len(args) != 4 {
+		return shim.Error("Incorrect number of arguments. Expecting 4 (TokenID, Hash, Owner, Creator)")
 	}
 
 	// ==== Input sanitation ====
@@ -110,26 +108,19 @@ func (t *SimpleChaincode) uploadArtwork(stub shim.ChaincodeStubInterface, args [
 	if len(args[3]) <= 0 {
 		return shim.Error("4th argument must be a non-empty string")
 	}
-	if len(args[4]) <= 0 {
-		return shim.Error("5th argument must be a non-empty string")
-	}
-	if len(args[5]) <= 0 {
-		return shim.Error("6th argument must be a non-empty string")
-	}
+
 	tokenID     := args[0]
 	en_pointer  := args[1]
 	owner		:= args[2]
 	creator		:= args[3]
-	name		:= args[4]
-	desc		:= args[5]
 
 	// ==== Check if Artwork already exists ====
 	ArtworkAsBytes, err := stub.GetState(tokenID)
 	if err != nil {
 		return shim.Error("Failed to get Artwork: " + err.Error())
 	} else if ArtworkAsBytes != nil {
-		fmt.Println("This Artwork already exists: " + name)
-		return shim.Error("This Artwork already exists: " + name)
+		fmt.Println("This Artwork already exists: " + tokenID)
+		return shim.Error("This Artwork already exists: " + tokenID)
 	}
 
 	// ==== Create Artwork object and marshal to JSON ====
@@ -140,7 +131,7 @@ func (t *SimpleChaincode) uploadArtwork(stub shim.ChaincodeStubInterface, args [
 	}
 
 	objectType := "Artwork"
-	artwork := &Artwork{objectType, string(enhash), owner, creator, name, desc, time.Now().UTC().String()}
+	artwork := &Artwork{objectType, string(enhash), owner, creator, time.Now().UTC().String()}
 	ArtworkJSONasBytes, err := json.Marshal(artwork)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -192,7 +183,6 @@ func (t *SimpleChaincode) deleteArtwork(stub shim.ChaincodeStubInterface, args [
 	}
 	tokenID := args[0]
 
-	// to maintain the color~name index, we need to read the Artwork first and get its color
 	valAsbytes, err := stub.GetState(tokenID) //get the Artwork from chaincode state
 	if err != nil {
 		jsonResp = "{\"Error\":\"Failed to get state for " + tokenID + "\"}"
