@@ -75,6 +75,19 @@ docker exec \
     -p "$CC_SRC_PATH" \
     -l "$CC_RUNTIME_LANGUAGE"
 
+echo "Installing smart contract on peer1.collector.spchain.com"
+docker exec \
+  -e CORE_PEER_LOCALMSPID=CollectorMSP \
+  -e CORE_PEER_ADDRESS=peer1.collector.spchain.com:8051 \
+  -e CORE_PEER_MSPCONFIGPATH=${COLLECTOR_MSPCONFIGPATH} \
+  -e CORE_PEER_TLS_ROOTCERT_FILE=${COLLECTOR_TLS_ROOTCERT_FILE} \
+  cli \
+  peer chaincode install \
+    -n artwork \
+    -v 1.0 \
+    -p "$CC_SRC_PATH" \
+    -l "$CC_RUNTIME_LANGUAGE"
+
 echo -e "\nInstalling smart contract on peer0.creator.spchain.com"
 docker exec \
   -e CORE_PEER_LOCALMSPID=CreatorMSP \
@@ -88,6 +101,19 @@ docker exec \
     -p "$CC_SRC_PATH" \
     -l "$CC_RUNTIME_LANGUAGE"
 echo ""
+
+echo "Installing smart contract on peer1.creator.spchain.com"
+docker exec \
+  -e CORE_PEER_LOCALMSPID=CreatorMSP \
+  -e CORE_PEER_ADDRESS=peer1.creator.spchain.com:10051 \
+  -e CORE_PEER_MSPCONFIGPATH=${CREATOR_MSPCONFIGPATH} \
+  -e CORE_PEER_TLS_ROOTCERT_FILE=${CREATOR_TLS_ROOTCERT_FILE} \
+  cli \
+  peer chaincode install \
+    -n artwork \
+    -v 1.0 \
+    -p "$CC_SRC_PATH" \
+    -l "$CC_RUNTIME_LANGUAGE"
 
 echo -e "\nInstalling smart contract on peer0.md.spchain.com"
 docker exec \
@@ -103,10 +129,38 @@ docker exec \
     -l "$CC_RUNTIME_LANGUAGE"
 echo ""
 
+echo -e "\nInstalling smart contract on peer1.md.spchain.com"
+docker exec \
+  -e CORE_PEER_LOCALMSPID=MdMSP \
+  -e CORE_PEER_ADDRESS=peer1.md.spchain.com:12051 \
+  -e CORE_PEER_MSPCONFIGPATH=${MD_MSPCONFIGPATH} \
+  -e CORE_PEER_TLS_ROOTCERT_FILE=${MD_TLS_ROOTCERT_FILE} \
+  cli \
+  peer chaincode install \
+    -n artwork \
+    -v 1.0 \
+    -p "$CC_SRC_PATH" \
+    -l "$CC_RUNTIME_LANGUAGE"
+echo ""
+
 echo -e "\nInstalling smart contract on peer0.gallery.spchain.com"
 docker exec \
   -e CORE_PEER_LOCALMSPID=GalleryMSP \
   -e CORE_PEER_ADDRESS=peer0.gallery.spchain.com:13051 \
+  -e CORE_PEER_MSPCONFIGPATH=${GALLERY_MSPCONFIGPATH} \
+  -e CORE_PEER_TLS_ROOTCERT_FILE=${GALLERY_TLS_ROOTCERT_FILE} \
+  cli \
+  peer chaincode install \
+    -n artwork \
+    -v 1.0 \
+    -p "$CC_SRC_PATH" \
+    -l "$CC_RUNTIME_LANGUAGE"
+echo ""
+
+echo -e "\nInstalling smart contract on peer1.gallery.spchain.com"
+docker exec \
+  -e CORE_PEER_LOCALMSPID=GalleryMSP \
+  -e CORE_PEER_ADDRESS=peer1.gallery.spchain.com:14051 \
   -e CORE_PEER_MSPCONFIGPATH=${GALLERY_MSPCONFIGPATH} \
   -e CORE_PEER_TLS_ROOTCERT_FILE=${GALLERY_TLS_ROOTCERT_FILE} \
   cli \
