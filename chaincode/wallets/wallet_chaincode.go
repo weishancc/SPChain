@@ -5,7 +5,7 @@
 // ==== Invoke Wallets ====
 // peer chaincode invoke -C mychannel -n wallets -c '{"Args":["init"]}'
 // peer chaincode invoke -C mychannel -n wallets -c '{"Args":["addWallet","name","price"]}'
-// peer chaincode invoke -C mychannel -n wallets -c '{"Args":["transferBalance","payer","payee","creator","price"]}'
+// peer chaincode invoke -C mychannel -n wallets -c '{"Args":["transferBalance","payer","payee","creator","price","r_y"]}'
 // peer chaincode invoke -C mychannel -n wallets -c '{"Args":["deleteWallet","name"]}'
 
 // ==== Query Wallets ====
@@ -147,20 +147,18 @@ func (t *SimpleChaincode) readBalance(stub shim.ChaincodeStubInterface, args []s
 }
 
 // ===============================================================================
-// transferWallet - transfer a Wallet by setting a new owner name on the Wallet
+// transferBalance - transfer a Wallet by setting a new owner name on the Wallet
 // ===============================================================================
 func (t *SimpleChaincode) transferBalance(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-
-	//   0       1       2       3
-	// "Payer", "Payee", "Creator", "Price"
-	if len(args) < 3 {
-		return shim.Error("Incorrect number of arguments. Expecting 4 (Payer, Payee, Creator, Price)")
+	if len(args) < 5 {
+		return shim.Error("Incorrect number of arguments. Expecting 5 (Payer, Payee, Creator, Price, R_y)")
 	}
 
 	payer 	:= args[0]
 	payee	:= args[1]
 	creator := args[2]
 	price	:= args[3]
+	r_y		:= args[4]
 	fmt.Println("- start transferBalance ", payer, payee, price)
 
 	// Payer (Collector)
@@ -176,6 +174,8 @@ func (t *SimpleChaincode) transferBalance(stub shim.ChaincodeStubInterface, args
 	if err != nil {
 		return shim.Error(err.Error())
 	}
+
+	fr_y, _ := strconv.ParseFloat(r_y, 32)
 	fbalance, _ := strconv.ParseFloat(price, 64)
 	PayerWalletToTransfer.Balance = PayerWalletToTransfer.Balance - fbalance //subtract the price
 
@@ -199,7 +199,7 @@ func (t *SimpleChaincode) transferBalance(stub shim.ChaincodeStubInterface, args
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	PayeeWalletToTransfer.Balance = PayeeWalletToTransfer.Balance + fbalance //add the price
+	PayeeWalletToTransfer.Balance = PayeeWalletToTransfer.Balance + fbalance*(1.0-fr_y) //add the price
 
 	PayeeWalletJSONasBytes, _ := json.Marshal(PayeeWalletToTransfer)
 	err = stub.PutState(payee, PayeeWalletJSONasBytes) //rewrite the Wallet
@@ -209,7 +209,7 @@ func (t *SimpleChaincode) transferBalance(stub shim.ChaincodeStubInterface, args
 
 
 	// Will not get royalties if payee euqals to creator (i.e., one-hand)
-	// Royalties 5% (Creator)
+	// Royalties r_y (Creator)
 	if payee != creator {
 		CreatorWalletAsBytes, err := stub.GetState(creator)
 		if err != nil {
@@ -223,8 +223,8 @@ func (t *SimpleChaincode) transferBalance(stub shim.ChaincodeStubInterface, args
 		if err != nil {
 			return shim.Error(err.Error())
 		}
-		percent := 0.05
-		CreatorWalletToTransfer.Balance = CreatorWalletToTransfer.Balance + fbalance*percent //add 5% of the price
+
+		CreatorWalletToTransfer.Balance = CreatorWalletToTransfer.Balance + fbalance*fr_y
 
 		CreatorWalletJSONasBytes, _ := json.Marshal(CreatorWalletToTransfer)
 		err = stub.PutState(creator, CreatorWalletJSONasBytes) //rewrite the Wallet

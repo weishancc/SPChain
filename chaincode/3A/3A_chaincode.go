@@ -21,7 +21,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"io/ioutil"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
@@ -157,10 +156,10 @@ func (t *SimpleChaincode) grantConsent(stub shim.ChaincodeStubInterface, args []
 	} else {
 		// ==== Add new consent ====
 		// Read encrpyted hash first
-		enhash, err := ioutil.ReadFile("./" + enhash)
-		if err != nil {
-			return shim.Error("Failed to get encrpyted hash: " + err.Error())
-		}
+		//enhash, err := ioutil.ReadFile("./" + enhash)
+		//if err != nil {
+		//	return shim.Error("Failed to get encrpyted hash: " + err.Error())
+		//}
 
 		p := make(map[string][]string)
 		p["C"] = append(p["C"], pk_DC)
@@ -169,7 +168,7 @@ func (t *SimpleChaincode) grantConsent(stub shim.ChaincodeStubInterface, args []
 		p["D"] = append(p["D"], pk_DC)
 
 		objectType := "Consent"
-		Consent := &Consent{objectType, p, time.Now().UTC().String(), string(enhash), pk_enc}
+		Consent := &Consent{objectType, p, time.Now().UTC().String(), enhash, pk_enc}
 		ConsentJSONasBytes, err := json.Marshal(Consent)
 		if err != nil {
 			return shim.Error(err.Error())

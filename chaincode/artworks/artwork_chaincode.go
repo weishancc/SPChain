@@ -4,7 +4,7 @@
 
 // ==== Invoke Artworks ====
 // peer chaincode invoke -C mychannel -n artworks -c '{"Args":["init"]}'
-// peer chaincode invoke -C mychannel -n artworks -c '{"Args":["uploadArtwork","tokenID","en_pointer","owner","creator"]}'
+// peer chaincode invoke -C mychannel -n artworks -c '{"Args":["uploadArtwork","tokenID","multiHash","owner","creator"]}'
 // peer chaincode invoke -C mychannel -n artworks -c '{"Args":["transferArtwork","tokenID","newOwner"]}'
 // peer chaincode invoke -C mychannel -n artworks -c '{"Args":["deleteArtwork","tokenID"]}'
 
@@ -22,7 +22,6 @@ import (
 	"fmt"
 	"strconv"
 	"time"
-	"io/ioutil"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
@@ -91,7 +90,7 @@ func (t *SimpleChaincode) uploadArtwork(stub shim.ChaincodeStubInterface, args [
 	var err error
 
 	if len(args) != 4 {
-		return shim.Error("Incorrect number of arguments. Expecting 4 (TokenID, Hash, Owner, Creator)")
+		return shim.Error("Incorrect number of arguments. Expecting 4 (TokenID, Multi-Hash, Owner, Creator)")
 	}
 
 	// ==== Input sanitation ====
@@ -110,7 +109,7 @@ func (t *SimpleChaincode) uploadArtwork(stub shim.ChaincodeStubInterface, args [
 	}
 
 	tokenID     := args[0]
-	en_pointer  := args[1]
+	multiHash	:= args[1]
 	owner		:= args[2]
 	creator		:= args[3]
 
@@ -125,13 +124,13 @@ func (t *SimpleChaincode) uploadArtwork(stub shim.ChaincodeStubInterface, args [
 
 	// ==== Create Artwork object and marshal to JSON ====
 	//Read encrpyted hash first
-	enhash, err := ioutil.ReadFile("./" + en_pointer)
-	if err != nil {
-		return shim.Error("Failed to get encrpyted hash: " + err.Error())
-	}
+	//enhash, err := ioutil.ReadFile("./" + en_pointer)
+	//if err != nil {
+	//	return shim.Error("Failed to get encrpyted hash: " + err.Error())
+	//}
 
 	objectType := "Artwork"
-	artwork := &Artwork{objectType, string(enhash), owner, creator, time.Now().UTC().String()}
+	artwork := &Artwork{objectType, multiHash, owner, creator, time.Now().UTC().String()}
 	ArtworkJSONasBytes, err := json.Marshal(artwork)
 	if err != nil {
 		return shim.Error(err.Error())
