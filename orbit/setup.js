@@ -1,5 +1,6 @@
 const IPFS = require('ipfs');
 const OrbitDB = require('orbit-db');
+const Identities = require('orbit-db-identity-provider')
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs').promises;
 const yargs = require('yargs');
@@ -58,22 +59,30 @@ async function main() {
 
   var db;
 
-  // Create IPFS instance
+  // Create IPFS instance with DS_identity
   const ipfsOptions = { repo: './ipfs', };
   const ipfs = await IPFS.create(ipfsOptions);
+  const options = { id: 'DS-id' }
+  const DS_identity = await Identities.createIdentity(options)
 
   // Create OrbitDB instance
   const orbitdb = await OrbitDB.createInstance(ipfs);
 
   if (argv._[0] == "create") {
     // Create a new docs db
-    db = await orbitdb.docs(argv.name);
+    db = await orbitdb.docs(argv.name, {
+      accessController: {
+        write: ['*']
+      }
+    });
 
+    
     // Write hash address to file
     try {
       const image = await fs.appendFile('./address.txt', argv.name + ' ' + db.address.toString() + ' ');
 
-      console.log('\n-- ' + argv.name + ' created --');
+      console.log('\n== ' + argv.name + ' created ==');
+	  console.log('-- Identity: ' + db.identity.publicKey);
       console.log('-- DB address: ' + db.address.toString());
       process.exit(0);
     } catch (error) {
@@ -91,11 +100,15 @@ async function main() {
 
       // Read the image and save its string into db
       const image = await fs.readFile(artData.imagePath);
-      const hash = await db.put({ _id: uuidv4(), artwork: image, name: artData.name, desc: artData.desc, price: artData.price, role: 'creator' }); // '+' means current collector
-      console.log('\n-- Store ' + hash + ' successfully \n');
+	  const tokenID = uuidv4();
+      const hash = await db.put({ _id: tokenID, artwork: image, name: artData.name, desc: artData.desc, price: artData.price, role: 'creator' }); // '+' means current collector
+      console.log('\n-- Store Successfully \n');
+	  console.log('tokenID:' + tokenID);
+	  console.log('multi-hash:' + hash);
 
       // Check and close db
-      getAll(db, orbitdb);
+      //getAll(db, orbitdb);
+	  process.exit(0);
 
     } catch (error) {
       console.log(error);
@@ -153,7 +166,6 @@ async function getAll(db, orbitdb) {
   // Disconnect with db and exit successfully
   await db.close();
   await orbitdb.disconnect();
-  process.exit(0);
 }
 
 main();
