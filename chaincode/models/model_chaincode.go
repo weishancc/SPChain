@@ -3,14 +3,14 @@
 */
 
 // ==== Invoke Model ====
-// peer chaincode invoke -C mychannel -n Model -c '{"Args":["init"]}'
-// peer chaincode invoke -C mychannel -n Model -c '{"Args":["addModel","name","address","creator","desc"]}'
-// peer chaincode invoke -C mychannel -n Model -c '{"Args":["invokeModel","api","offset"]}'
-// peer chaincode invoke -C mychannel -n Model -c '{"Args":["deleteModel","name"]}'
+// peer chaincode invoke -C mychannel -n models -c '{"Args":["init"]}'
+// peer chaincode invoke -C mychannel -n models -c '{"Args":["addModel","name","address","creator","desc"]}'
+// peer chaincode invoke -C mychannel -n models -c '{"Args":["invokeModel","api","offset"]}'
+// peer chaincode invoke -C mychannel -n models -c '{"Args":["deleteModel","name"]}'
 
 // ==== Query Model ====
-// peer chaincode query -C mychannel -n Model -c '{"Args":["readModel","name"]}'
-// peer chaincode query -C mychannel -n Model -c '{"Args":["queryAll"]}'
+// peer chaincode query -C mychannel -n models -c '{"Args":["readModel","name"]}'
+// peer chaincode query -C mychannel -n models -c '{"Args":["queryAll"]}'
 
 
 package main
@@ -33,7 +33,7 @@ type SimpleChaincode struct {
 
 type Model struct {
 	ObjectType string	`json:"docType"` //docType is used to distinguish the various types of objects in state database
-	Hash       string	`json:"Hash"`
+	Address    string	`json:"Address"`
 	Creator    string	`json:"Creator"`
 	Desc       string	`json:"Desc"`
 	Timestamp  string 	`json:"Timestamp"`

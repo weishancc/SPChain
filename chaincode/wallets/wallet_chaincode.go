@@ -5,6 +5,7 @@
 // ==== Invoke Wallets ====
 // peer chaincode invoke -C mychannel -n wallets -c '{"Args":["init"]}'
 // peer chaincode invoke -C mychannel -n wallets -c '{"Args":["addWallet","name","price"]}'
+// peer chaincode invoke -C mychannel -n wallets -c '{"Args":["addBalance","name","premium"]}'
 // peer chaincode invoke -C mychannel -n wallets -c '{"Args":["transferBalance","payer","payee","creator","price","r_y"]}'
 // peer chaincode invoke -C mychannel -n wallets -c '{"Args":["deleteWallet","name"]}'
 
@@ -74,6 +75,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return t.getHistoryForWallet(stub, args)
 	} else if function == "queryAll" { //query all Wallets
 		return t.queryAll(stub, args)
+	} else if function == "addBalance" {
+		return t.addBalance(stub, args)
 	}
 
 	fmt.Println("invoke did not find func: " + function) //error
@@ -119,6 +122,46 @@ func (t *SimpleChaincode) addWallet(stub shim.ChaincodeStubInterface, args []str
 	}
 
 	fmt.Println("- end upload Wallet")
+	return shim.Success(nil)
+}
+
+// ============================================================
+// addBalance - add a new Balance, store into chaincode state
+// ============================================================
+func (t *SimpleChaincode) addBalance(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	var err error
+
+	if len(args) != 2 {
+		return shim.Error("Incorrect number of arguments. Expecting 2 (Name, Premium)")
+	}
+	name := args[0]
+	premium := args[1]
+
+	fmt.Println("- start adding Balance")
+
+	// ==== Check if Wallet already exists ====
+	WalletAsBytes, err := stub.GetState(name)
+	if err != nil {
+		return shim.Error("Failed to get Wallet: " + err.Error())
+	}
+	// ==== Create Wallet object and marshal to JSON ====
+	fpremium, _ := strconv.ParseFloat(premium, 64)	// Convert balance string to float64 type
+
+	WalletToAdd := Wallet{}
+	err = json.Unmarshal(WalletAsBytes, &WalletToAdd) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	WalletToAdd.Balance = WalletToAdd.Balance + fpremium //add the fpremium
+	WalletToAddJSONasBytes, _ := json.Marshal(WalletToAdd)
+
+	err = stub.PutState(name, WalletToAddJSONasBytes) //rewrite the Wallet
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	fmt.Println("- end upload Balance")
 	return shim.Success(nil)
 }
 
