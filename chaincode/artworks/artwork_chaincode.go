@@ -5,7 +5,7 @@
 // ==== Invoke Artworks ====
 // peer chaincode invoke -C mychannel -n artworks -c '{"Args":["init"]}'
 // peer chaincode invoke -C mychannel -n artworks -c '{"Args":["uploadArtwork","tokenID","multiHash","owner","creator"]}'
-// peer chaincode invoke -C mychannel -n artworks -c '{"Args":["transferArtwork","tokenID","newOwner"]}'
+// peer chaincode invoke -C mychannel -n artworks -c '{"Args":["transferArtwork","tokenID","newOwner","multiHash"]}'
 // peer chaincode invoke -C mychannel -n artworks -c '{"Args":["deleteArtwork","tokenID"]}'
 
 // ==== Query Artworks ====
@@ -33,7 +33,7 @@ type SimpleChaincode struct {
 
 type Artwork struct {
 	ObjectType string `json:"docType"` //docType is used to distinguish the various types of objects in state database
-	Enhash	   string `json:"Enhash"`
+	Multihash  string `json:"Multihash"`
 	Owner      string `json:"Owner"`
 	Creator    string `json:"Creator"`
 	Timestamp  string `json:"Timestamp"`
@@ -210,14 +210,13 @@ func (t *SimpleChaincode) deleteArtwork(stub shim.ChaincodeStubInterface, args [
 // ===============================================================================
 func (t *SimpleChaincode) transferArtwork(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	//   0       1
-	// "TokenID", "Owner"
-	if len(args) < 2 {
-		return shim.Error("Incorrect number of arguments. Expecting 2 (TokenID, NewOwner)")
+	if len(args) < 3 {
+		return shim.Error("Incorrect number of arguments. Expecting 3 (TokenID, NewOwner, MultiHash)")
 	}
 
 	tokenID := args[0]
 	newOwner := args[1]
+	multiHash := args[2]
 	fmt.Println("- start transferArtwork ", tokenID, newOwner)
 
 	ArtworkAsBytes, err := stub.GetState(tokenID)
@@ -233,6 +232,7 @@ func (t *SimpleChaincode) transferArtwork(stub shim.ChaincodeStubInterface, args
 		return shim.Error(err.Error())
 	}
 	ArtworkToTransfer.Owner = newOwner //change the owner
+	ArtworkToTransfer.Multihash =  multiHash //update multihash
 
 	ArtworkJSONasBytes, _ := json.Marshal(ArtworkToTransfer)
 	err = stub.PutState(tokenID, ArtworkJSONasBytes) //rewrite the Artwork

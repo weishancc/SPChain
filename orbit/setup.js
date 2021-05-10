@@ -138,6 +138,7 @@ async function main() {
       // Check and close db
       await dbOwner.close();
       getAll(dbNew, orbitdb);
+	  process.exit(0);
 
     } catch (error) {
       console.log(error);

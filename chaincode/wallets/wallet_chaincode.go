@@ -175,7 +175,7 @@ func (t *SimpleChaincode) transferBalance(stub shim.ChaincodeStubInterface, args
 		return shim.Error(err.Error())
 	}
 
-	fr_y, _ := strconv.ParseFloat(r_y, 32)
+	fr_y, _ := strconv.ParseFloat(r_y, 64)
 	fbalance, _ := strconv.ParseFloat(price, 64)
 	PayerWalletToTransfer.Balance = PayerWalletToTransfer.Balance - fbalance //subtract the price
 
@@ -184,7 +184,6 @@ func (t *SimpleChaincode) transferBalance(stub shim.ChaincodeStubInterface, args
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-
 
 	// Payee (Owner)
 	PayeeWalletAsBytes, err := stub.GetState(payee)
@@ -199,18 +198,25 @@ func (t *SimpleChaincode) transferBalance(stub shim.ChaincodeStubInterface, args
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	PayeeWalletToTransfer.Balance = PayeeWalletToTransfer.Balance + fbalance*(1.0-fr_y) //add the price
 
-	PayeeWalletJSONasBytes, _ := json.Marshal(PayeeWalletToTransfer)
-	err = stub.PutState(payee, PayeeWalletJSONasBytes) //rewrite the Wallet
-	if err != nil {
-		return shim.Error(err.Error())
-	}
+	// Payee (Owner) will not get royalties if payee euqals to creator (i.e., firsthand transaction)
+	if payee == creator {
+		PayeeWalletToTransfer.Balance = PayeeWalletToTransfer.Balance + fbalance //add the price
+		PayeeWalletJSONasBytes, _ := json.Marshal(PayeeWalletToTransfer)
+		err = stub.PutState(payee, PayeeWalletJSONasBytes) //rewrite the Wallet
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+	} else {
+		// Payee (Owner) get [price*(1-r_y)]
+		PayeeWalletToTransfer.Balance = PayeeWalletToTransfer.Balance + fbalance * (1.0 - fr_y) //add the price
+		PayeeWalletJSONasBytes, _ := json.Marshal(PayeeWalletToTransfer)
+		err = stub.PutState(payee, PayeeWalletJSONasBytes) //rewrite the Wallet
+		if err != nil {
+			return shim.Error(err.Error())
+		}
 
-
-	// Will not get royalties if payee euqals to creator (i.e., one-hand)
-	// Royalties r_y (Creator)
-	if payee != creator {
+		// Orginal creator get royalties [price*r_y]
 		CreatorWalletAsBytes, err := stub.GetState(creator)
 		if err != nil {
 			return shim.Error("Failed to get Wallet:" + err.Error())
@@ -224,15 +230,14 @@ func (t *SimpleChaincode) transferBalance(stub shim.ChaincodeStubInterface, args
 			return shim.Error(err.Error())
 		}
 
-		CreatorWalletToTransfer.Balance = CreatorWalletToTransfer.Balance + fbalance*fr_y
-
+		CreatorWalletToTransfer.Balance = CreatorWalletToTransfer.Balance + fbalance * fr_y
 		CreatorWalletJSONasBytes, _ := json.Marshal(CreatorWalletToTransfer)
 		err = stub.PutState(creator, CreatorWalletJSONasBytes) //rewrite the Wallet
 		if err != nil {
 			return shim.Error(err.Error())
 		}
 	}
-	
+
 	fmt.Println("- end transferBalance (success)")
 	return shim.Success(nil)
 }

@@ -95,44 +95,44 @@ app.post('/spchain/grantConsent/', async function (req, res) {
 // });
 
 
-// app.get('/spchain/readArtwork/:tokenid', async function (req, res) {
-//     try {
+app.get('/spchain/readArtwork/', async function (req, res) {
+    try {
 
-//         // Create a new file system based wallet for managing identities.
-//         const walletPath = path.join(process.cwd(), 'wallet');
-//         const wallet = new FileSystemWallet(walletPath);
-//         console.log(`Wallet path: ${walletPath}`);
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), 'wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
 
-//         // Check to see if we've already enrolled the user.
-//         const userExists = await wallet.exists('Koma');
-//         if (!userExists) {
-//             console.log('An identity for the user "Koma" does not exist in the wallet');
-//             console.log('Run the registerUser.js application before retrying');
-// 			require('child_process').fork('registerUser.js');
-//             return;
-//         }
+        // Check to see if we've already enrolled the user.
+        const userExists = await wallet.exists('Koma');
+        if (!userExists) {
+            console.log('An identity for the user "Koma" does not exist in the wallet');
+            console.log('Run the registerGalleryUser.js application before retrying');
+			require('child_process').fork('registerGalleryUser.js');
+            return;
+        }
 
-//         // Create a new gateway for connecting to our peer node.
-//         const gateway = new Gateway();
-//         await gateway.connect(ccpPath, { wallet, identity: 'Koma', discovery: { enabled: true, asLocalhost: true } });
+        // Create a new gateway for connecting to our peer node.
+        const gateway = new Gateway();
+        await gateway.connect(ccpPath, { wallet, identity: 'Koma', discovery: { enabled: true, asLocalhost: true } });
 
-//         // Get the network (channel) our contract is deployed to.
-//         const network = await gateway.getNetwork('mychannel');
+        // Get the network (channel) our contract is deployed to.
+        const network = await gateway.getNetwork('mychannel');
 
-//         // Get the contract from the network.
-//         const contract = network.getContract('artwork');
+        // Get the contract from the network.
+        const contract = network.getContract('artworks');
 
-//         // Evaluate the specified transaction.
-//         const result = await contract.evaluateTransaction('readArtwork', req.params.tokenid);
-//         console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
-//         res.status(200).json({response: result.toString()});
+        // Evaluate the specified transaction.
+        const result = await contract.evaluateTransaction('readArtwork', req.body.tokenID);
+        console.log(`readArtwork has been evaluated, result is: ${result.toString()}`);
+        res.status(200).json({response: result.toString()});
 
-//     } catch (error) {
-//         console.error(`Failed to evaluate transaction: ${error}`);
-//         res.status(500).json({error: error});
-//         process.exit(1);
-//     }
-// });
+    } catch (error) {
+        console.error(`Failed to evaluate readArtwork: ${error}`);
+        res.status(500).json({error: error});
+        process.exit(1);
+    }
+});
 
 app.post('/spchain/uploadArtwork/', async function (req, res) {
     try {
@@ -171,6 +171,47 @@ app.post('/spchain/uploadArtwork/', async function (req, res) {
 
     } catch (error) {
         console.error(`Failed to submit uploadArtwork: ${error}`);
+        process.exit(1);
+    }
+})
+
+app.post('/spchain/transferArtwork/', async function (req, res) {
+    try {
+
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), 'wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
+
+        // Check to see if we've already enrolled the user.
+        const userExists = await wallet.exists('Koma');
+        if (!userExists) {
+            console.log('An identity for the user "Koma" does not exist in the wallet');
+            console.log('Run the registerGalleryUser.js application before retrying');
+			require('child_process').fork('registerGalleryUser.js');
+            return;
+        }
+
+        // Create a new gateway for connecting to our peer node.
+        const gateway = new Gateway();
+        await gateway.connect(ccpPath, { wallet, identity: 'Koma', discovery: { enabled: true, asLocalhost: true } });
+
+        // Get the network (channel) our contract is deployed to.
+        const network = await gateway.getNetwork('mychannel');
+
+        // Get the contract from the network.
+        const contract = network.getContract('artworks');
+
+        // Submit the specified transaction.
+        await contract.submitTransaction('transferArtwork', req.body.tokenID, req.body.newCollector, req.body.multihash);
+        console.log('transferArtwork has been submitted');
+        res.send('transferArtwork has been submitted');
+
+        // Disconnect from the gateway.
+        await gateway.disconnect();
+
+    } catch (error) {
+        console.error(`Failed to submit transferArtwork: ${error}`);
         process.exit(1);
     }
 })
@@ -215,6 +256,48 @@ app.post('/spchain/addLog/', async function (req, res) {
         process.exit(1);
     }
 })
+
+app.post('/spchain/transferBalance/', async function (req, res) {
+    try {
+
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), 'wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
+
+        // Check to see if we've already enrolled the user.
+        const userExists = await wallet.exists('Koma');
+        if (!userExists) {
+            console.log('An identity for the user "Koma" does not exist in the wallet');
+            console.log('Run the registerGalleryUser.js application before retrying');
+			require('child_process').fork('registerGalleryUser.js');
+            return;
+        }
+
+        // Create a new gateway for connecting to our peer node.
+        const gateway = new Gateway();
+        await gateway.connect(ccpPath, { wallet, identity: 'Koma', discovery: { enabled: true, asLocalhost: true } });
+
+        // Get the network (channel) our contract is deployed to.
+        const network = await gateway.getNetwork('mychannel');
+
+        // Get the contract from the network.
+        const contract = network.getContract('wallets');
+
+        // Submit the specified transaction.
+        await contract.submitTransaction('transferBalance', req.body.newCollector, req.body.collector, req.body.creator, req.body.price, req.body.r_y);
+        console.log('transferBalance has been submitted');
+        res.send('transferBalance has been submitted');
+
+        // Disconnect from the gateway.
+        await gateway.disconnect();
+
+    } catch (error) {
+        console.error(`Failed to submit transferBalance: ${error}`);
+        process.exit(1);
+    }
+})
+
 // app.put('/spchain/transferArtwork/:tokenid', async function (req, res) {
 //     try {
 
