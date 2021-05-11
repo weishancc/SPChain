@@ -28,11 +28,11 @@ class initialKeys():
     
     # ---------------------------------------------------------------
     # Export keys to the directory, where flag is used to distinguish 
-    # different roles such as DS, DC and DP
+    # different roles such as DS, DC and DP(TP/DC)
     # ---------------------------------------------------------------
     def export_keys(self, key, publicKey, role):         
-        if role == "DP":
-            self.name = "DP"
+        if role == "TP":
+            self.name = "TP"
             self.path = os.path.join(os.getcwd(), self.name)
         if role == "DC":
              self.name = "DC"

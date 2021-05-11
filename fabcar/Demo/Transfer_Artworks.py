@@ -19,7 +19,7 @@ def get_roles(api, tokenID):
         r = requests.get(api, json=par)
         r.raise_for_status()
         res = json.loads(r.text)  #{'response': '{"Creator": ...}'}    
-        res = json.loads(res['response'])  # {'Creator': 'Koma', 'Owner': ...}
+        res = json.loads(res['response'])  #{'Creator': 'Koma', 'Owner': ...}
         
         return res
     except requests.exceptions.RequestException as e:  
@@ -59,11 +59,14 @@ def invoke_artwork_CC(api, tokenID, newCollector, multiHash):
         
 if __name__== "__main__":  
     # (1) Invoke artwork_CC
+    # ----------------------
     tokenID = input('Input tokenID: ')
     api = "http://140.123.105.138:8080/spchain/readArtwork/"
     res = get_roles(api, tokenID)
     
+    
     # (2) Invoke wallet_CC
+    # ---------------------
     creator, owner = res['Creator'], res['Owner']
     r_y = str(input('Input royalty rate: '))
     newCollector = input('Input new collector: ')
@@ -72,15 +75,21 @@ if __name__== "__main__":
     api = "http://140.123.105.138:8080/spchain/transferBalance/"
     change_balance(api, newCollector, owner, creator, price, r_y)
     
+    
     # (3) Update orbitdb information
+    # ----------------------------------------------------------------
     # -> node setup.js transfer -t $tokenID -n $newCollector -o $owner
     
+    
     # (4) Invoke artwork_CC
+    # ---------------------
     api = "http://140.123.105.138:8080/spchain/transferArtwork/"
     multiHash = input('multi-hash: ')
     res = invoke_artwork_CC(api, tokenID, newCollector, multiHash)
 
+
     # (5) Invoke log_CC
+    # -----------------
     api = "http://140.123.105.138:8080/spchain/addLog/"
     path = os.path.join(os.getcwd(), newCollector)
     operation = "Transfer the artwork"

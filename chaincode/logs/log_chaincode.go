@@ -31,7 +31,7 @@ type SimpleChaincode struct {
 
 type Log struct {
 	ObjectType string	`json:"docType"` //docType is used to distinguish the various types of objects in state database
-	sk_data    string	`json:"sk_data"`
+	SkData     string	`json:"SKData"`
 	Timestamp  string	`json:"Timestamp"`
 	Status     string	`json:"Status"`
 	Operation  string	`json:"Operation"`
@@ -90,9 +90,9 @@ func (t *SimpleChaincode) addLog(stub shim.ChaincodeStubInterface, args []string
 	pk_DC		:= args[1]
 	pk_DP		:= args[2]
 	sk_data		:= args[3]
-	status 		:= args[4]
+	status		:= args[4]
 	operation	:= args[5]
-	
+
 	fmt.Println("- start adding Log")
 
 	// ==== Check if Log already exists ====
@@ -100,8 +100,29 @@ func (t *SimpleChaincode) addLog(stub shim.ChaincodeStubInterface, args []string
 	if err != nil {
 		return shim.Error("Failed to get Log: " + err.Error())
 	} else if LogAsBytes != nil {
-		fmt.Println("This Log already exists: " + pk_DS + "-" + pk_DC + "-" + pk_DP)
-		return shim.Error("This Log already exists: " + pk_DS + "-" + pk_DC + "-" + pk_DP)
+		fmt.Println("This Log already exists, then we update the Log: " + pk_DS + "-" + pk_DC + "-" + pk_DP)
+		LogToUpdate := Log{}
+		err = json.Unmarshal(LogAsBytes, &LogToUpdate) // Unmarshal it aka JSON.parse()
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+
+		// Update timestamp and operation
+		LogToUpdate.Timestamp = time.Now().UTC().String()
+		LogToUpdate.Operation = operation
+		LogToUpdateJSONasBytes, err := json.Marshal(LogToUpdate)
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+
+		// === Update Log to state ===
+		err = stub.PutState(pk_DS + "-" + pk_DC + "-" + pk_DP, LogToUpdateJSONasBytes)
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+
+		fmt.Println("- end update Log")
+		return shim.Success(nil)
 	}
 
 	// ==== Create Log object and marshal to JSON ====

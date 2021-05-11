@@ -109,17 +109,20 @@ func (t *SimpleChaincode) grantConsent(stub shim.ChaincodeStubInterface, args []
 		if err != nil {
 			return shim.Error(err.Error())
 		}
-		
+
+		policy = strings.Trim(policy, "{}")
+		policy = strings.Replace(policy, " ", "", -1)
 		singlePolicy := strings.Split(policy, ",")
+
 		var index int
 
 		for _, v := range singlePolicy{
 			// Retrieve key and value of input policy
-			v = strings.Trim(v, "{}")
-			key := string(strings.Split(v, ":")[0][1])
+			key := string(strings.Split(v, ":")[0][1]) //C
 			value := strings.Split(v, ":")[1]
-			value = strings.Trim(value , "\"")
+			value = strings.Trim(value , "\"") //+pk_DP
 			policies := ConsentToUpdate.Policy[key]
+
 
 			// Add(+) or Remove(-) consent
 			if value[0] == '+' {
@@ -134,12 +137,12 @@ func (t *SimpleChaincode) grantConsent(stub shim.ChaincodeStubInterface, args []
 
 				// Remove the consent whose address is var "index"
 				policies[len(policies)-1], policies[index] = policies[index], policies[len(policies)-1]
-				policies = policies[:len(policies)-1]	
-				
+				policies = policies[:len(policies)-1]
+
 			} else {
 				return shim.Error("Invalid input consent list!")
 			}
-			
+
 			// Update consent to update which is going to be written to the state
 			ConsentToUpdate.Policy[key] = policies
 			fmt.Println(ConsentToUpdate.Policy[key])

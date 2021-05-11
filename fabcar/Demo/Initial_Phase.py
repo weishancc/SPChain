@@ -12,12 +12,11 @@ from Initial_Keys import initialKeys
 # -----------------
 # Invoke 3A_CC API
 # -----------------
-def invoke_3A_CC(api, path, policy, name):
-    # pk_DC
+def invoke_3A_CC(api, path, policy):
+    # pk_DC   
     DS_path = os.path.join(os.getcwd(), 'DC')
     with open(DS_path + '\\pk_DC.pem', 'rb') as f:   
         pk_DC = f.read().decode('utf-8').replace('-----BEGIN PUBLIC KEY-----\n', '').replace('\n-----END PUBLIC KEY-----', '')
-        print(pk_DC)
         
     # ehash
     with open(path + '\\enhash', 'rb') as f:
@@ -33,7 +32,7 @@ def invoke_3A_CC(api, path, policy, name):
     try:
         r = requests.post(api, json=par)
         r.raise_for_status()
-        print(r.text)
+        return r.text
     except requests.exceptions.RequestException as e:  
         # Whoops 200 isn't return
         raise SystemExit(e)
@@ -49,33 +48,16 @@ if __name__== "__main__":
     sk_enc, pk_enc = initial.generate_keys()
     sk_data, pk_data = initial.generate_keys()
     sk_DC, pk_DC = initial.generate_keys()
+    sk_TP, pk_TP = initial.generate_keys()
     
     initial.export_keys(sk_enc, pk_enc, 'enc') 
     initial.export_keys(sk_data, pk_data, 'data' ) 
     enhash = initial.encrypt_address(pk_enc ,hash)
     initial.export_keys(sk_DC, pk_DC, 'DC' ) 
+    initial.export_keys(sk_TP, pk_TP, 'TP') 
     
     # Next we inoke 3A_CC, for "DC" we don't need 
     # to set policy because in 3A_CC set all by default
     api = "http://140.123.105.138:8080/spchain/grantConsent/"
     policy = ""
-    #policy = "{\"C\":\"+pk_DP\"}"
-    invoke_3A_CC(api, path, policy, name)
-    
-    #-------------------------------------------------------------#
-    # # Use decryptor to decrypt enhash
-    # decryptor = PKCS1_OAEP.new(sk)
-    # decrypted = decryptor.decrypt(ast.literal_eval(str(enhash)))
-    # print(decrypted)
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    ret = invoke_3A_CC(api, path, policy)   
