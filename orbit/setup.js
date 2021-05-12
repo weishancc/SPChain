@@ -2,6 +2,7 @@ const IPFS = require('ipfs');
 const OrbitDB = require('orbit-db');
 const Identities = require('orbit-db-identity-provider')
 const { v4: uuidv4 } = require('uuid');
+const NodeRSA = require('node-rsa');
 const fs = require('fs').promises;
 const yargs = require('yargs');
 
@@ -98,17 +99,21 @@ async function main() {
       // Parse JSON fortmat artwork data to js object
       var artData = JSON.parse(argv.artwork);
 
-      // Read the image and save its string into db
+      // Read the image and save its string into db, firstly, we encrpyted ciphertext imformation using pk_data generated from "Upload_Artworks.py"
+      const pk_data = await fs.readFile('pk_data.pem');
+      const key = new NodeRSA(pk_data);
+
       const image = await fs.readFile(artData.imagePath);
-	  const tokenID = uuidv4();
-      const hash = await db.put({ _id: tokenID, artwork: image, name: artData.name, desc: artData.desc, price: artData.price, role: 'creator' }); // '+' means current collector
+      const tokenID = uuidv4();
+      const hash = await db.put({ _id: tokenID, artwork: key.encrypt(image), name: key.encrypt(artData.name), desc: key.encrypt(artData.desc), price: key.encrypt(artData.price), role: 'creator' }); // '+' means current collector
+
       console.log('\n-- Store Successfully \n');
-	  console.log('tokenID:' + tokenID);
-	  console.log('multi-hash:' + hash);
+      console.log('tokenID:' + tokenID);
+      console.log('multi-hash:' + hash);
 
       // Check and close db
       //getAll(db, orbitdb);
-	  process.exit(0);
+      process.exit(0);
 
     } catch (error) {
       console.log(error);

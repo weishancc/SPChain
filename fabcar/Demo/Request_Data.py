@@ -100,7 +100,9 @@ if __name__== "__main__":
     # (3) Now we have decrypted address, query this address to get data,
     #     and then decrypted data with sk_data -> get final ciphertext
     # -----------------------------------------------------------------
-    # node request.js query -a /orbitdb...
+    # node request.js query -a /orbitdb/...
+    # node request.js decrypt -s sk_data.pem -a /orbitdb/...
+    
 
     
     
