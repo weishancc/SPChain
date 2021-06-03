@@ -100,7 +100,7 @@ func (t *SimpleChaincode) addLog(stub shim.ChaincodeStubInterface, args []string
 	if err != nil {
 		return shim.Error("Failed to get Log: " + err.Error())
 	} else if LogAsBytes != nil {
-		fmt.Println("This Log already exists, then we update the Log: " + pk_DS + "-" + pk_DC + "-" + pk_DP)
+		fmt.Println("This Log already exists, then we update the Log")
 		LogToUpdate := Log{}
 		err = json.Unmarshal(LogAsBytes, &LogToUpdate) // Unmarshal it aka JSON.parse()
 		if err != nil {

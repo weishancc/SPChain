@@ -1,0 +1,15 @@
+initialConsent	536	0	11.5	7.17	1.27	4.17	10.2
+readConsent	24149	0	483.0	0.05	0.00	0.01	482.9
+grantRevokeConsent	473	0	10.1	7.88	1.20	4.71	8.9
+uploadArtwork	645	0	12.9	6.11	1.05	3.20	12.2
+readArtwork	25226	0	504.6	0.05	0.00	0.01	504.5
+transferArtwork	30	685	14.3	5.41	1.47	3.29	0.6
+getHistoryForArtwork	21834	0	436.7	0.05	0.01	0.01	436.6
+addLog	505	0	10.1	5.71	1.12	4.13	9.4
+readLog	23847	0	476.9	0.05	0.00	0.01	476.9
+addModel	355	0	7.4	24.75	1.02	4.77	7.0
+readModel	25031	0	500.6	0.04	0.00	0.01	500.6
+invokeModel	424	0	9.0	10.10	2.31	5.35	7.9
+addWallet	412	0	8.2	8.39	1.51	4.95	7.6
+readBalance	25262	0	505.3	0.04	0.00	0.01	505.2
+transferBlalance	32	658	13.8	5.58	1.53	3.59	0.6

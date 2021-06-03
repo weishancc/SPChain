@@ -103,7 +103,7 @@ func (t *SimpleChaincode) addModel(stub shim.ChaincodeStubInterface, args []stri
 		return shim.Error("Failed to get Model: " + err.Error())
 	} else if ModelAsBytes != nil {
 		fmt.Println("This Model already exists: " + name)
-		return shim.Error("This Model already exists: " + name)
+		return shim.Success(nil)
 	}
 
 	// ==== Create Model object and marshal to JSON ====

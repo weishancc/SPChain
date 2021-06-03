@@ -1,0 +1,226 @@
+test:
+  name: spchain-benchmark
+  description: benchmark for five smart contracts (3A/artworks/logs/models/wallets)
+  workers:
+    type: local
+    number: 2
+  rounds:
+    #------------------------------------------------
+    #                   3A
+    #-------------------------------------------------
+    - label: initialConsent
+      description: Grant consent in initial  hase
+      chaincodeId: 3A
+      txDuration: 50
+      rateControl:
+        type: fixed-backlog
+        opts:
+          startingTps: 10
+          unfinished_per_client: 30
+      callback: benchmarks/callbacks/initialConsent.js
+
+    - label: readConsent
+      description: Read policy when TP tried to request data
+      chaincodeId: 3A
+      txDuration: 50
+      rateControl:
+        type: fixed-backlog
+        opts:
+          startingTps: 100
+      callback: benchmarks/callbacks/readConsent.js
+
+    - label: grantRevokeConsent
+      description: Grant and revoke consent to DC/DP
+      chaincodeId: 3A
+      txDuration: 50
+      rateControl:
+        type: fixed-backlog
+        opts:
+          startingTps: 10
+          unfinished_per_client: 30
+      callback: benchmarks/callbacks/grantRevokeConsent.js
+
+    # ------------------------------------------------
+    #                   artworks
+    # -------------------------------------------------
+    - label: uploadArtwork
+      description: Upload the artwork
+      chaincodeId: artwork
+      txDuration: 50
+      rateControl:
+        type: fixed-backlog
+        opts:
+          startingTps: 10
+          unfinished_per_client: 30
+      callback: benchmarks/callbacks/uploadArtwork.js
+
+    - label: readArtwork
+      description: Read the artwork
+      chaincodeId: artwork
+      txDuration: 50
+      rateControl:
+        type: fixed-backlog
+        opts:
+          startingTps: 100
+      callback: benchmarks/callbacks/readArtwork.js
+      arguments:
+        assets: 10
+
+    - label: transferArtwork
+      description: Transfer the artwork
+      chaincodeId: artwork
+      txDuration: 50
+      rateControl:
+        type: fixed-backlog
+        opts:
+          startingTps: 10
+          unfinished_per_client: 30
+      callback: benchmarks/callbacks/transferArtwork.js
+      arguments:
+        assets: 10
+
+    - label: getHistoryForArtwork
+      description: Get provenance and transferring history for artwork
+      chaincodeId: artwork
+      txDuration: 50
+      rateControl:
+        type: fixed-backlog
+        opts:
+          startingTps: 100
+      callback: benchmarks/callbacks/getHistoryForArtwork.js
+      arguments:
+        assets: 10
+
+    # ------------------------------------------------
+    #                   logs
+    # -------------------------------------------------
+    - label: addLog
+      description: Add a new log entry
+      chaincodeId: logs
+      txDuration: 50
+      rateControl:
+        type: fixed-backlog
+        opts:
+          startingTps: 5
+          unfinished_per_client: 30
+      callback: benchmarks/callbacks/addLog.js
+
+    - label: readLog
+      description: Read the log
+      chaincodeId: logs
+      txDuration: 50
+      rateControl:
+        type: fixed-backlog
+        opts:
+          startingTps: 100
+      callback: benchmarks/callbacks/readLog.js
+      arguments:
+        assets: 10
+
+    # ------------------------------------------------
+    #                   models
+    # -------------------------------------------------
+    - label: addModel
+      description: Add the model information
+      chaincodeId: models
+      txDuration: 50
+      rateControl:
+        type: fixed-backlog
+        opts:
+          startingTps: 5
+          unfinished_per_client: 30
+      callback: benchmarks/callbacks/addModel.js
+
+    - label: readModel
+      description: Read the model information (esp. model address)
+      chaincodeId: models
+      txDuration: 50
+      rateControl:
+        type: fixed-backlog
+        opts:
+          startingTps: 100
+      callback: benchmarks/callbacks/readModel.js
+      arguments:
+        assets: 10
+
+    - label: invokeModel
+      description: Invoke model api service
+      chaincodeId: models
+      txDuration: 50
+      rateControl:
+        type: fixed-backlog
+        opts:
+          startingTps: 10
+          unfinished_per_client: 30
+      callback: benchmarks/callbacks/invokeModel.js
+
+    #------------------------------------------------
+    #                   wallets
+    #-------------------------------------------------
+    - label: addWallet
+      description: Add the wallet
+      chaincodeId: wallets
+      txDuration: 50
+      rateControl:
+        type: fixed-backlog
+        opts:
+          startingTps: 5
+          unfinished_per_client: 30
+      callback: benchmarks/callbacks/addWallet.js
+
+    - label: readBalance
+      description: Read the balance
+      chaincodeId: wallets
+      txDuration: 50
+      rateControl:
+        type: fixed-backlog
+        opts:
+          startingTps: 100
+      callback: benchmarks/callbacks/readBalance.js
+      arguments:
+        assets: 10
+
+    - label: transferBlalance
+      description: Transfer balance in the case of artwork transactions
+      chaincodeId: wallets
+      txDuration: 50
+      rateControl:
+        type: fixed-backlog
+        opts:
+          startingTps: 10
+          unfinished_per_client: 30
+      callback: benchmarks/callbacks/transferBlalance.js
+      arguments:
+        assets: 10
+
+monitor:
+  type:
+    - docker
+  docker:
+    containers:
+      - peer0.collector.spchain.com
+      - peer1.collector.spchain.com
+      - peer0.creatortor.spchain.com
+      - peer1.creatortor.spchain.com
+      - peer0.md.spchain.com
+      - peer1.md.spchain.com
+      - peer0.gallery.spchain.com
+      - peer1.gallery.spchain.com
+      - orderer.spchain.com
+      - orderer2.spchain.com
+      - orderer3.spchain.com
+      - orderer4.spchain.com
+      - orderer5.spchain.com
+      - couchdb0
+      - couchdb2
+      - couchdb4
+      - couchdb10
+    charting:
+      bar:
+        metrics: [all]
+    # polar:
+    #   metrics: [all]
+
+observer:
+  type: local
+  interval: 3

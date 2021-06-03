@@ -119,7 +119,7 @@ func (t *SimpleChaincode) uploadArtwork(stub shim.ChaincodeStubInterface, args [
 		return shim.Error("Failed to get Artwork: " + err.Error())
 	} else if ArtworkAsBytes != nil {
 		fmt.Println("This Artwork already exists: " + tokenID)
-		return shim.Error("This Artwork already exists: " + tokenID)
+		return shim.Success(nil)
 	}
 
 	// ==== Create Artwork object and marshal to JSON ====

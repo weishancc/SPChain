@@ -94,7 +94,7 @@ func (t *SimpleChaincode) addWallet(stub shim.ChaincodeStubInterface, args []str
 	}
 	name := args[0]
 	balance := args[1]
-	
+
 	fmt.Println("- start adding Wallet")
 
 	// ==== Check if Wallet already exists ====
@@ -103,7 +103,7 @@ func (t *SimpleChaincode) addWallet(stub shim.ChaincodeStubInterface, args []str
 		return shim.Error("Failed to get Wallet: " + err.Error())
 	} else if WalletAsBytes != nil {
 		fmt.Println("This Wallet already exists: " + name)
-		return shim.Error("This Wallet already exists: " + name)
+		return shim.Success(nil)
 	}
 
 	// ==== Create Wallet object and marshal to JSON ====
