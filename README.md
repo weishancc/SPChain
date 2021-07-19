@@ -14,7 +14,7 @@
 
 
 ## [Requirements](#requirements)
-* [Hyperledger Fabric Images](https://hub.docker.com/search?q=hyperledger%2Ffabric&type=image) (arm-v1.4.4)
+* [Hyperledger Fabric Images](https://hub.docker.com/search?q=hyperledger%2Ffabric&type=image) (amd-v1.4.4)
 * [Go](https://golang.org/) (v1.11.0 or later)
 * [Docker](https://docs.docker.com/get-docker/) (v18.03 or later)
 * [Docker Compose](https://docs.docker.com/compose/) (v1.14.0 or later)
